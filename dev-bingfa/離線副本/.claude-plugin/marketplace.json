@@ -1,0 +1,13 @@
+{
+  "name": "mattpocock-offline",
+  "owner": { "name": "dev-bingfa package (local wrapper)" },
+  "description": "Local wrapper so Codex can install the unmodified offline copy in mattpocock-skills/.",
+  "plugins": [
+    {
+      "name": "mattpocock-skills",
+      "source": "./mattpocock-skills",
+      "description": "Matt Pocock's skills, unmodified offline copy",
+      "category": "engineering"
+    }
+  ]
+}
