@@ -77,16 +77,20 @@ foreach ($cand in 'py -3', 'python', 'python3') {
   }
 }
 if ($py) { 'PYTHON 有（' + $py + '）' } else { 'PYTHON 沒有可用的 Python 3.8 以上' }
+$mk = @((& $c plugin marketplace list --json | Out-String | ConvertFrom-Json) | ForEach-Object { $_ })
+$off = @($mk | Where-Object { $_.name -eq 'mattpocock-offline' }) | Select-Object -First 1
+if ($off) { if ($off.path.TrimEnd('\') -ieq (Join-Path $root '離線副本').TrimEnd('\')) { 'MATT-OFFLINE 指向這個包裹' } else { 'MATT-OFFLINE-OLD 離線副本目前指向：' + $off.path } }
 ```
 
-**成功的樣子**：有 `Claude Code 程式：…`、`版本：…`，以及 `MATT …`、`DEV-BINGFA …`、`PYTHON …` 三行。記下這三行，後面要用。
+**成功的樣子**：有 `Claude Code 程式：…`、`版本：…`，以及 `MATT …`、`DEV-BINGFA …`、`PYTHON …` 三行；以前用離線副本裝過 Matt 的話，還會多一行 `MATT-OFFLINE …` 或 `MATT-OFFLINE-OLD …`。記下這些行，後面要用。
 
 - 出現 `STOP` → 停下來回報。
 - 出現 `MATT-LOOSE` → 停下來，告訴使用者：「你的電腦好像已經用別的方式裝過 Matt Pocock 的工具（列出名字）。再裝外掛會讓每個工具出現兩次。要我跳過 Matt 的工具、只裝其他部分嗎？」等使用者回答。回答「跳過」就略過第 3 步。
 
 ## 第 3 步：安裝 Matt Pocock 的工具
 
-- 第 2 步顯示 `MATT 已經有了` → **整步跳過**，不要再裝第二份。結果表寫「原本就有」。
+- 第 2 步顯示 `MATT 已經有了`，而且**沒有** `MATT-OFFLINE-OLD` → **整步跳過**，不要再裝第二份。結果表寫「原本就有」。
+- 第 2 步顯示 `MATT 已經有了`，**而且有** `MATT-OFFLINE-OLD`（以前用別的資料夾的離線副本裝的，例如舊版包裹）→ 不裝第二份，只做 **3C**。
 - 顯示 `MATT 還沒裝` → 先做 3A。
 
 ### 3A 官方方式（需要連得上 GitHub，可能要等一兩分鐘）
@@ -118,6 +122,19 @@ if ($LASTEXITCODE -eq 0) { & $c plugin install mattpocock-skills@mattpocock-offl
 
 **成功的樣子**：看到 `Successfully installed plugin: mattpocock-skills@mattpocock-offline`，最後一行 `結束碼：0`。結果表寫「用離線副本安裝（連不上 GitHub）」。失敗 → 停下來回報。
 
+### 3C 改用這個包裹的離線副本（只有第 2 步出現 `MATT-OFFLINE-OLD` 才做）
+
+```powershell
+$root = '<ROOT>'
+$c = (Get-Command claude -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1).Source
+if (-not $c) { $c = (Get-ChildItem -LiteralPath "$env:APPDATA\Claude\claude-code" -Directory -ErrorAction SilentlyContinue | Get-ChildItem -Directory | ForEach-Object { Get-Item -LiteralPath (Join-Path $_.FullName 'claude.exe') -ErrorAction SilentlyContinue } | Sort-Object { try { [version]$_.Directory.Parent.Name } catch { [version]'0.0' } } -Descending | Select-Object -First 1).FullName }
+& $c plugin marketplace add (Join-Path $root '離線副本')
+if ($LASTEXITCODE -eq 0) { & $c plugin install mattpocock-skills@mattpocock-offline }
+'結束碼：' + $LASTEXITCODE
+```
+
+**成功的樣子**：看到 `now points at …`（後面是這個包裹的 `離線副本`）或 `already on disk`，再看到 `already installed — it loads in place from <ROOT>\離線副本\…`，最後一行 `結束碼：0`。結果表 Matt 那一列寫「改用這個包裹的離線副本（原本指向：寫出 `MATT-OFFLINE-OLD` 後面的路徑）」。失敗 → 停下來回報。
+
 ## 第 4 步：安裝本包裹的主外掛
 
 ```powershell
@@ -131,7 +148,7 @@ if ($LASTEXITCODE -eq 0) { & $c plugin install dev-bingfa@dev-bingfa }
 
 **成功的樣子**：看到 `Successfully added marketplace: dev-bingfa`（或 `already on disk`），再看到 `Successfully installed plugin: dev-bingfa@dev-bingfa`（或 `is already installed`），最後一行 `結束碼：0`。
 
-如果輸出有 `now points at`：代表以前從別的資料夾裝過，現在改用這個資料夾。這不是錯誤，繼續做，但在結果表的「下一步」寫：「舊的包裹資料夾（輸出裡 `was already added from` 後面那個）已經不再使用。」
+如果輸出有 `now points at`：代表以前從別的資料夾裝過，現在改用這個資料夾。這不是錯誤，繼續做。結果表的「下一步」要等第 7 步的路徑檢查通過才能寫：「舊的包裹資料夾（輸出裡 `was already added from` 後面那個）本包裹已經不再使用。」如果第 7 步顯示還有東西指向舊資料夾，就改寫：「舊的包裹資料夾**還不能刪**，還有東西在讀它（寫出是哪一個）。」
 
 ## 第 5 步：存檔自動檢查（選用）
 
@@ -219,15 +236,20 @@ if ($okS -and $okE -and $chk.Contains($block)) { 'OK 規則' + $how + '：' + $t
 ## 第 7 步：最後自我檢查
 
 ```powershell
+$root = '<ROOT>'
 $c = (Get-Command claude -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1).Source
 if (-not $c) { $c = (Get-ChildItem -LiteralPath "$env:APPDATA\Claude\claude-code" -Directory -ErrorAction SilentlyContinue | Get-ChildItem -Directory | ForEach-Object { Get-Item -LiteralPath (Join-Path $_.FullName 'claude.exe') -ErrorAction SilentlyContinue } | Sort-Object { try { [version]$_.Directory.Parent.Name } catch { [version]'0.0' } } -Descending | Select-Object -First 1).FullName }
 & $c plugin list
 $dir = if ($env:CLAUDE_CONFIG_DIR) { $env:CLAUDE_CONFIG_DIR } else { Join-Path $env:USERPROFILE '.claude' }
 $t = Get-Content -LiteralPath (Join-Path $dir 'CLAUDE.md') -Raw -Encoding UTF8
 '規則區塊開始標記數：' + ([regex]::Matches($t, '<!-- dev-bingfa:start ')).Count + '　結束標記數：' + ([regex]::Matches($t, '<!-- dev-bingfa:end -->')).Count
+$rootN = $root.TrimEnd('\') + '\'
+foreach ($m in @((& $c plugin marketplace list --json | Out-String | ConvertFrom-Json) | ForEach-Object { $_ })) {
+  if ($m.name -in 'dev-bingfa', 'mattpocock-offline') { $m.name + ' 讀的資料夾：' + $m.path + $(if (($m.path.TrimEnd('\') + '\').StartsWith($rootN, [StringComparison]::OrdinalIgnoreCase)) { '　OK 在這個包裹裡' } else { '　OLD 不在這個包裹裡' }) }
+}
 ```
 
-**成功的樣子**：清單裡有 `dev-bingfa@dev-bingfa`（`enabled`）、一個 `mattpocock-skills@…`（`enabled`）、有 Python 時還有 `dev-bingfa-check@dev-bingfa`；最後一行兩個數字都是 `1`。不符合 → 在結果表標出哪一項不對，並回報。
+**成功的樣子**：清單裡有 `dev-bingfa@dev-bingfa`（`enabled`）、一個 `mattpocock-skills@…`（`enabled`）、有 Python 時還有 `dev-bingfa-check@dev-bingfa`；規則標記兩個數字都是 `1`；`dev-bingfa 讀的資料夾` 是 `OK`，有 `mattpocock-offline` 那一行的話也要是 `OK`（Matt 用官方方式裝的就不會有這一行）。出現 `OLD` → 結果表要寫哪個還在讀舊資料夾、舊資料夾**還不能刪**。不符合 → 在結果表標出哪一項不對，並回報。
 
 ## 第 8 步：回報給使用者
 
@@ -235,7 +257,7 @@ $t = Get-Content -LiteralPath (Join-Path $dir 'CLAUDE.md') -Raw -Encoding UTF8
 
 | 項目 | 結果（裝好了／原本就有／沒裝） | 為什麼 | 下一步 |
 |---|---|---|---|
-| Matt Pocock 的工具 | | 官方方式、離線副本、或原本就有 | |
+| Matt Pocock 的工具 | | 官方方式、離線副本、改用這個包裹的離線副本（3C）、或原本就有 | |
 | dev-bingfa 主外掛 | | | |
 | 存檔自動檢查 | | 沒有 Python 就寫「自動檢查這項沒啟用」和第 5 步的替代做法 | |
 | 規則檔 `CLAUDE.md` | | 寫出檔案位置和備份位置 | |
