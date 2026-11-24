@@ -381,3 +381,64 @@ PASS: all 13 check(s) passed.
 
 - 加到第 7 節：Codex 0.140.0 怎麼把 `commandWindows` 交給 `cmd.exe /C`（第 8 項），留給任務卡 12。
 - 審查說的「`bash -n` 0 錯誤」對整段指令不成立（修改前也一樣），見證據 05「審查後修正」Nit 4；不影響實際執行。
+
+---
+
+## 檢查工具改寫為 Python（2026-11-24）
+
+### 為什麼
+
+`tools/check-package.ps1` 在這台公司電腦上被防毒軟體當成惡意程式擋下（`ScriptContainedMaliciousContent`，誤判）。我們不去繞過防毒（不改寫來躲、不加例外、不改設定、不重複觸發），改成一支普通的 Python 程式。
+
+### 改了什麼
+
+- 新增 `tools/check_package.py`：Python 3.8 以上、只用標準程式庫，13 項檢查和舊版相同，全部直接用 Python 做。「基本版和母本相同」那一項自己算 SHA-256 比對，不再呼叫 `sync-basic.ps1`；比對助手的邏輯（原本在 `check-agents.py`）也併進來了。加了 `--root <資料夾>`，可以拿去檢查一份複本。結束碼不變：0 全過、1 有失敗、2 沒失敗但有跳過（不會假裝通過）。
+- 比舊版稍微嚴一點的地方：`.json`、助手檔一律用嚴格 UTF-8 讀（有 BOM 或壞字元算失敗）；`openai.yaml` 的 `allow_implicit_invocation: false` 要在 `policy:` 底下；`agents/`、`web-search-modules/` 資料夾裡多出子資料夾也算多餘。
+- 刪掉 `tools/check-package.ps1`。`tools/sync-basic.ps1` 沒動。
+- 新增 `tools/README.md`（每個工具做什麼、打包前跑 `python tools/check_package.py`、為什麼拿掉 PowerShell 版）。
+- `tools/check-agents.py` **還在**：內容已併進 `check_package.py`，沒有人再呼叫它；要刪掉時系統沒有給刪除權限，留給維護人決定。
+- Python 跑這些檔案時，防毒沒有擋。
+
+### 在真正的資料夾上執行（`python tools/check_package.py`）
+
+```
+Check           Result   Detail
+-----           ------   ------
+basic-sync      PASS     all 6 file(s) equal to master
+rules-twin      PASS     AGENTS.md == CLAUDE.md 82B5F14C684D
+agent-files     PASS     3 Claude .md + 3 Codex .toml, nothing else
+agent-twin      PASS     explorer ok(0 allowed), implementer ok(0 allowed), web-search-agent ok(2 allowed)
+check-silence   PASS     sha256 FF5640ACBCF5 == recorded
+version         PASS     VERSION 1.0 -> both plugin.json 1.0.0
+line-endings    PASS     3 file(s): .sh LF, .cmd CRLF
+json            PASS     5 file(s) parse
+hooks-json      PASS     SessionStart + PostToolUse(Write|Edit), timeout 10, commands as expected
+marketplace     PASS     sources resolve: dev-bingfa, dev-bingfa-check
+commit-manual   PASS     disable-model-invocation: true + openai.yaml allow_implicit_invocation: false
+search-modules  PASS     5 module(s), each with a heading
+hook-matrix     PASS     98 cases, 0 failed; 300-file patch: 300.md=0.11s, 300.py=0.15s
+PASS: all 13 check(s) passed.
+```
+
+結束碼 0，約 25 秒（大部分是 `hook-matrix`）。
+
+### 11 種故意弄壞，重跑（`.scratch/dev-bingfa/research/sandbox/mutations/mutate.py`）
+
+把審查的 `mutate.ps1` 改寫成 Python。每一種都先把 `dev-bingfa/`（不含 `離線副本`）和 `tools/` 複製到沙盒，只改複本，再跑 `check_package.py --root <複本>`；真正的資料夾只讀不改。另外先跑一次沒改過的複本當對照組（M0），確認複製方法本身會通過。原始輸出：`mutations/mutate-out.txt`。
+
+| 弄壞 | 結果 | 哪一項 FAIL |
+|---|---|---|
+| M0 對照組：沒改的複本 | 通過（exit 0） | 無 |
+| M1 Codex 搜尋助手刪掉 `CODEX_HOME`／`<version>` 說明 | **抓到** | `agent-twin` |
+| M2 TOML 多 `sandbox_mode`、`model` | **抓到** | `agent-twin` |
+| M3 Claude 助手多 `tools`、`permissionMode` | **抓到** | `agent-twin` |
+| M4 matcher 打錯、timeout 改 1 | **抓到** | `hooks-json` |
+| M5 `post_check.py` 永遠回 0 | **抓到** | `hook-matrix` |
+| M6 `run.cmd` 從 CRLF 變 LF | **抓到** | `line-endings` |
+| M7 `no-python.json` 壞掉 | **抓到** | `json`、`hook-matrix` |
+| M8 marketplace 的 `source` 改錯 | **抓到** | `marketplace` |
+| M9 母本和基本版都刪掉 `openai.yaml` | **抓到** | `commit-manual` |
+| M10 清空一個策略檔 | **抓到** | `search-modules` |
+| M11 多一個 `rogue.toml` | **抓到** | `agent-files` |
+
+**11／11 抓到**，每一種都是由預期的那一項抓到。上一段 M6–M10「沒拿到結果」的缺口，這次補齊了。
