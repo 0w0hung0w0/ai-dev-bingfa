@@ -1,0 +1,19 @@
+# 換行符號規則（卡 06）
+# sh 腳本一定要 LF（CRLF 會讓 sh 讀到多餘的 \r 而失敗）；cmd/bat 一定要 CRLF（cmd.exe 在 LF 下會跳行出錯）。
+*.sh   text eol=lf
+*.cmd  text eol=crlf
+*.bat  text eol=crlf
+
+# 其他文字檔一律 LF：每台電腦（不管 core.autocrlf 怎麼設）取出來都一樣，照工作目錄打包的 zip 也一樣。
+# Windows 上的 PowerShell、記事本、Python、Claude Code、Codex 都讀得懂 LF。
+*.py   text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.md   text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.ps1  text eol=lf
+VERSION text eol=lf
+
+# Matt Pocock 離線副本：要和原作者 repo 逐位元組相同，不做任何換行轉換（放最後，蓋過上面的規則）
+dev-bingfa/離線副本/mattpocock-skills/** -text -eol

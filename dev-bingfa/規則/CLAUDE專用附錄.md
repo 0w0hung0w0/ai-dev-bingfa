@@ -4,7 +4,7 @@ Append this after the common rules in `~/.claude/CLAUDE.md`. Everything here is 
 
 ## A1. Subagent names (for §5)
 
-The `dev-bingfa` plugin ships three subagents. Plugin agents carry the plugin prefix, most likely `dev-bingfa:explorer`, `dev-bingfa:implementer`, `dev-bingfa:web-search-agent`; the exact names are shown in `/agents`.
+The `dev-bingfa` plugin ships three subagents. Plugin agents carry the plugin prefix: `claude plugin validate` lists them as `dev-bingfa:explorer`, `dev-bingfa:implementer`, `dev-bingfa:web-search-agent`. If `/agents` shows different names, `/agents` is the source of truth.
 
 - Investigation subagent (§5) → `explorer`.
 - Implementation subagent (§5) → `implementer`.
