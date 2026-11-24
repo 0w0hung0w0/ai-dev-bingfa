@@ -63,7 +63,7 @@ Session hygiene:
 - One session, one ticket: resolve at most one planned slice of work per conversation. When context runs long or a branch task appears, suggest the user run `handoff` *(user-run)* and continue in a fresh session from the handoff doc.
 - Work too large for a single session → suggest the user run `wayfinder` *(user-run)* to chart a decision map first.
 
-Skip rules: purely page-local small changes (text, styling, logic touching no shared assets) may skip `code-review` and `blast-radius`; trivial one-line fixes skip the whole flow.
+Skip rules: purely page-local small changes (text, styling, logic touching no shared assets) may skip `blast-radius` only — independent review (`code-review`) is never skipped; trivial one-line fixes skip the whole flow.
 
 Conflict handling:
 - `CONTEXT_MAP.md` vs. actual code → trust the code, flag the conflict, suggest updating the map.
