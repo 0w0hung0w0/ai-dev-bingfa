@@ -1,0 +1,6 @@
+# 只給 Codex 讀（Claude Code 不讀這個檔）：不准 AI 自己決定叫用 commit，
+# 只有使用者明確打 $dev-bingfa:commit（或從 /skills 選）才會執行。
+# Claude Code 那邊靠 SKILL.md 的 disable-model-invocation: true 做同一件事。
+# 文件：https://learn.chatgpt.com/docs/build-skills（agents/openai.yaml → policy.allow_implicit_invocation）
+policy:
+  allow_implicit_invocation: false
