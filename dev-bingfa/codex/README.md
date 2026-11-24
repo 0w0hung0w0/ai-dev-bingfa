@@ -18,22 +18,33 @@
 
 ## 2. 其他東西放哪裡（Codex 完整版的全部安裝位置）
 
+Codex 有兩條安裝路線，裝出來的 skill 名字不一樣：
+
+| 路線 | 給誰 | 怎麼裝 | skill 名字 | 存檔自動檢查 |
+|---|---|---|---|---|
+| **複製檔案**（預設） | 只用 ChatGPT 桌面 App 的人（App 不附 `codex` 指令） | 請 AI 讀包裹最上層的 `安裝指示-Codex.md` 照做（不會打指令的話看 `貼指令備案.md` 的檔案總管步驟） | 沒有前綴：`commit`、`brownfield-recon`、`grill-me` | **不裝**——「這項沒啟用」，用第 4 節的手動替代做法 |
+| 外掛 | 電腦上有 `codex` 指令的人 | 下面這張表 | 有前綴：`dev-bingfa:commit`、`mattpocock-skills:grill-me` | 可以裝，但未實測成功 |
+
+複製檔案路線放的位置：4 個 skill 和 Matt 的 skill → `%USERPROFILE%\.agents\skills\<名字>\`；3 個助手 → `~/.codex/agents/`；5 份搜尋策略 → `~/.codex/agents/bingfa-web-search-modules/`（網路搜尋助手先找這裡，找不到才找外掛的位置）；規則 → `~/.codex/AGENTS.md`（用標記包起來附加在檔尾）。
+
+外掛路線：
+
 | 東西 | 怎麼裝 | 放在哪裡 |
 |---|---|---|
 | 4 個 skill（含 `commit`） | `codex plugin marketplace add "<包裹>\外掛"`，再 `codex plugin add dev-bingfa@dev-bingfa` | Codex 自己複製到 `~/.codex/plugins/cache/dev-bingfa/dev-bingfa/<版本>/`（例如 `1.0.0`） |
 | 網路搜尋的 5 個策略檔 | 跟著上一行一起裝好，不用另外動 | 同上資料夾裡的 `web-search-modules/`（網路搜尋助手會自己去那裡讀） |
 | 3 個助手 | 手動複製（見第 1 節） | `~/.codex/agents/` |
 | 存檔檢查（選用） | `codex plugin add dev-bingfa-check@dev-bingfa`，第一次開 Codex 時在 `/hooks` 按「信任」 | `~/.codex/plugins/cache/dev-bingfa/dev-bingfa-check/<版本>/`（例如 `1.0.0`） |
-| 通用規則 | 把 `規則/AGENTS.md` 複製成 `~/.codex/AGENTS.md`（整台電腦都套用） | `~/.codex/AGENTS.md` |
+| 通用規則 | 附加在 `~/.codex/AGENTS.md` 檔尾（整台電腦都套用）；最省事是照 `安裝指示-Codex.md` 第 3 步做，它會備份、用標記包起來、不重複附加 | `~/.codex/AGENTS.md` |
 | Codex 專用附錄 | 把 `規則/CODEX專用附錄.md` 的內容貼在 `~/.codex/AGENTS.md` 通用規則的後面 | 同上 |
-| 個人偏好 | 照 `規則/個人偏好範例.md` 的說明，貼在 `~/.codex/AGENTS.md` 最後面（附錄之後） | 同上 |
+| 個人偏好 | 照 `規則/個人偏好範例-Codex.md` 的說明，放在 `~/.codex/AGENTS.md` 的 `<!-- dev-bingfa:end -->` 下面（安裝指示第一次會自動放） | 同上 |
 
 規則也可以只放在某個專案：把 `AGENTS.md` 放在專案最上層資料夾。Codex 會先讀 `~/.codex/AGENTS.md`，再讀專案的 `AGENTS.md`（專案的排在後面，等於優先）。全部規則檔加起來不能超過 32 KiB（通用規則本身約 8.5 KB）。`規則/CLAUDE專用附錄.md` 不要貼給 Codex；Codex 用的是 `規則/CODEX專用附錄.md`。
 
 ## 3. 在 Codex 裡怎麼用
 
-- **skill**：Codex 清單上的名字是 `dev-bingfa:brownfield-recon`、`dev-bingfa:blast-radius`、`dev-bingfa:seam-audit`、`dev-bingfa:commit`。在對話框打 `$` 會跳出 skill 清單可以選，或打 `/skills` 選。前三個 AI 也會在合適時自己用。
-- **提交**：只能你自己叫——打 `$` 選 `dev-bingfa:commit`（或 `/skills` 選）。AI 不會自己決定提交（見第 4 節）。
+- **skill**：複製檔案路線的名字是 `brownfield-recon`、`blast-radius`、`seam-audit`、`commit`；外掛路線是 `dev-bingfa:brownfield-recon`、`dev-bingfa:blast-radius`、`dev-bingfa:seam-audit`、`dev-bingfa:commit`。在對話框打 `$` 會跳出 skill 清單可以選（CLI 也可以打 `/skills` 選）。前三個 AI 也會在合適時自己用。
+- **提交**：只能你自己叫——打 `$` 選 `commit`（外掛路線是 `dev-bingfa:commit`）。AI 不會自己決定提交（見第 4 節）。
 - **助手**：Codex 不會自己派助手，要你在對話裡點名，例如「請派 bingfa-explorer 查清楚登入失敗的原因」。`/subagents` 可以切換查看正在工作的助手。
 - 以上「打 `$` 選」「點名派助手」都是官方文件的用法，**本機沒登入所以未實測**。
 
@@ -47,7 +58,7 @@
 | 助手：網路搜尋 | 有（`dev-bingfa:web-search-agent`） | **有**（`bingfa-web-search-agent`，同上） | 同上。搜尋策略檔改讀外掛安裝位置；找不到時助手會說出來 |
 | 提交 `commit` | 有，只能手動叫 | **有**，只能手動叫 | 見下一列 |
 | 「只能手動叫」的保護 | 有（`SKILL.md` 的 `disable-model-invocation: true`） | **有**（`skills/commit/agents/openai.yaml` 的 `allow_implicit_invocation: false`；實測：加了之後 `commit` 從 AI 看得到的自動清單消失） | 「你手動叫還叫得起來」是官方文件說的，未實測。萬一失效，規則檔第 5 節「提交只能由使用者叫」仍是第二道防線 |
-| 存檔自動檢查（選用） | 有（已模擬測試） | **未實測成功**（Windows 與 Mac/Linux 的執行方式都只在這台 Windows 電腦上模擬過） | Codex 的 hook 要你在 `/hooks` 手動信任才會跑；這台公司電腦上自訂 hook 從沒看到真的執行過。**手動替代**：交付前自己問 AI 一句（見下方） |
+| 存檔自動檢查（選用） | 有（已模擬測試） | 複製檔案路線：**沒有**（這項沒啟用）。外掛路線：**未實測成功**（Windows 與 Mac/Linux 的執行方式都只在這台 Windows 電腦上模擬過） | Codex 的 hook 要你在 `/hooks` 手動信任才會跑；這台公司電腦上自訂 hook 從沒看到真的執行過。**手動替代**：交付前自己問 AI 一句（見下方） |
 | 沒有 Python 時提示「這項沒啟用」 | 有 | **未實測**（Windows 上指令已接好） | 提示文字寫「再重新開啟對話」，兩個工具通用 |
 | 通用規則 | 有（`~/.claude/CLAUDE.md`） | **有**（`~/.codex/AGENTS.md`；實測：Codex 讀進去了） | 外掛帶不進規則檔，要手動複製 |
 | 工具專用附錄（助手名字對照） | 有（`規則/CLAUDE專用附錄.md`） | **有**（`規則/CODEX專用附錄.md`） | 貼在 `~/.codex/AGENTS.md` 通用規則後面。附錄裡寫「未實測」的叫法，同樣要登入才看得到 |

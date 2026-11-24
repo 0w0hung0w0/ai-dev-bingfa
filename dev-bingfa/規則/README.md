@@ -8,14 +8,15 @@
 | `CLAUDE.md` | 通用規則（和 `AGENTS.md` 內容一模一樣，只是檔名不同） | Claude Code |
 | `CLAUDE專用附錄.md` | 只有 Claude Code 才適用的補充 | Claude Code |
 | `CODEX專用附錄.md` | 只有 Codex 才適用的補充 | Codex |
-| `個人偏好範例.md` | 回覆語言、驗收方式、模型名稱等，自己改 | 所有工具 |
+| `個人偏好範例.md` | 回覆語言、驗收方式、模型名稱等，自己改 | Claude Code，以及基本版工具 |
+| `個人偏好範例-Codex.md` | 同上，模型那一節改成 Codex 的說法（不寫 Claude 的模型名稱） | Codex |
 
 ## 每個工具放哪裡
 
 | 工具 | 放到哪個檔案 | 依序貼入 |
 |---|---|---|
-| Claude Code | `~/.claude/CLAUDE.md` | `CLAUDE.md` → `CLAUDE專用附錄.md` → 你改好的個人偏好 |
-| Codex | `~/.codex/AGENTS.md` | `AGENTS.md` → `CODEX專用附錄.md` → 你改好的個人偏好 |
+| Claude Code | `~/.claude/CLAUDE.md` | `CLAUDE.md` → `CLAUDE專用附錄.md`（這兩段由安裝指示放在 `<!-- dev-bingfa:start …-->`／`<!-- dev-bingfa:end -->` 中間）→ 標記下面放你改好的個人偏好（`個人偏好範例.md`） |
+| Codex | `~/.codex/AGENTS.md` | `AGENTS.md` → `CODEX專用附錄.md`（同樣放在標記中間）→ 標記下面放你改好的個人偏好（`個人偏好範例-Codex.md`） |
 | Cursor、Antigravity（基本版，未實測） | 專案資料夾最上層的 `AGENTS.md` | `AGENTS.md` → 你改好的個人偏好 |
 
 `~` 代表你的使用者資料夾（Windows 通常是 `C:\Users\你的帳號`）。如果那個檔案已經有內容，把新內容貼在最後面，不要蓋掉原本的。
