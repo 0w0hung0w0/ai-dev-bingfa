@@ -1,5 +1,8 @@
 {
   "name": "dev-bingfa-check",
   "version": "1.0.0",
-  "description": "AI 系統開發兵法選用外掛：存檔時自動檢查，需要電腦有 Python"
+  "description": "AI 系統開發兵法選用外掛：存檔時自動檢查，需要電腦有 Python",
+  "author": {
+    "name": "AI 系統開發兵法 維護人"
+  }
 }

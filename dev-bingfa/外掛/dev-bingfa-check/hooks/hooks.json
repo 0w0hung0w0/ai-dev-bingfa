@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo `# <#` >/dev/null\nsh \"${CLAUDE_PLUGIN_ROOT}/hooks/run.sh\" session\nexit $?\n#> > $null\n$ProgressPreference = 'SilentlyContinue'\n$root = \"${CLAUDE_PLUGIN_ROOT}\"\nif (-not $root) { $root = $env:CLAUDE_PLUGIN_ROOT }\n& \"$root/hooks/run.cmd\" session\nexit $LASTEXITCODE",
+            "commandWindows": "\"${CLAUDE_PLUGIN_ROOT}\\hooks\\run.cmd\" session",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo `# <#` >/dev/null\nsh \"${CLAUDE_PLUGIN_ROOT}/hooks/run.sh\" post\nexit $?\n#> > $null\n$ProgressPreference = 'SilentlyContinue'\n$root = \"${CLAUDE_PLUGIN_ROOT}\"\nif (-not $root) { $root = $env:CLAUDE_PLUGIN_ROOT }\n& \"$root/hooks/run.cmd\" post\nexit $LASTEXITCODE",
+            "commandWindows": "\"${CLAUDE_PLUGIN_ROOT}\\hooks\\codex-post.cmd\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,8 +1,19 @@
 {
   "name": "dev-bingfa",
-  "owner": { "name": "AI 系統開發兵法" },
+  "owner": {
+    "name": "AI 系統開發兵法"
+  },
+  "description": "AI 系統開發兵法：固定開發流程包的外掛目錄（主外掛＋選用的存檔檢查外掛）",
   "plugins": [
-    { "name": "dev-bingfa", "source": "./dev-bingfa", "description": "AI 系統開發兵法：固定開發流程包（skill 與助手設定）" },
-    { "name": "dev-bingfa-check", "source": "./dev-bingfa-check", "description": "選用：存檔時自動檢查的腳本，需要電腦有 Python" }
+    {
+      "name": "dev-bingfa",
+      "source": "./dev-bingfa",
+      "description": "AI 系統開發兵法：固定開發流程包（skill 與助手設定）"
+    },
+    {
+      "name": "dev-bingfa-check",
+      "source": "./dev-bingfa-check",
+      "description": "選用：存檔時自動檢查的腳本，需要電腦有 Python"
+    }
   ]
 }

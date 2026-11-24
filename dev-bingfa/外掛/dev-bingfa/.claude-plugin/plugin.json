@@ -1,5 +1,8 @@
 {
   "name": "dev-bingfa",
   "version": "1.0.0",
-  "description": "AI 系統開發兵法：固定開發流程包（skill 與助手設定）"
+  "description": "AI 系統開發兵法：固定開發流程包（skill 與助手設定）",
+  "author": {
+    "name": "AI 系統開發兵法 維護人"
+  }
 }
