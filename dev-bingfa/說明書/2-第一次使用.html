@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>說明書二：第一次使用｜AI 系統開發兵法 1.0</title>
+<style>
+:root {
+  --ink: #1a1a1a; --muted: #555; --line: #c8c8c8; --paper: #ffffff;
+  --brand: #1f3a5f; --ok: #1e6b3a; --ng: #8a4b00; --warn: #a3001b; --soft: #f4f6f8;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0 auto; max-width: 880px; padding: 24px 16px 48px;
+  color: var(--ink); background: var(--paper);
+  font-family: "Microsoft JhengHei", "微軟正黑體", "PingFang TC", "Noto Sans TC", "Heiti TC", sans-serif;
+  font-size: 15px; line-height: 1.75;
+}
+h1, h2, h3, h4 { line-height: 1.35; color: var(--brand); }
+h2 { margin-top: 2.2em; padding-bottom: .25em; border-bottom: 2px solid var(--brand); font-size: 1.45em; }
+h3 { margin-top: 1.6em; font-size: 1.15em; }
+h4 { margin: 1.2em 0 .3em; font-size: 1em; }
+p, li { overflow-wrap: anywhere; }
+code { font-family: Consolas, "Courier New", monospace; background: var(--soft); border: 1px solid #e2e5e9; padding: 0 .25em; border-radius: 3px; font-size: .92em; overflow-wrap: anywhere; }
+table { border-collapse: collapse; width: 100%; margin: .8em 0; font-size: .93em; }
+th, td { border: 1px solid var(--line); padding: .4em .55em; vertical-align: top; text-align: left; }
+th { background: var(--soft); }
+.cover { border: 3px solid var(--brand); padding: 28px 24px; margin-bottom: 28px; }
+.cover .t1 { font-size: 2.2em; font-weight: bold; color: var(--brand); margin: 0; letter-spacing: .08em; }
+.cover .t2 { font-size: 1.25em; margin: .1em 0 1em; color: var(--ink); }
+.cover .t3 { font-size: 1.6em; font-weight: bold; margin: .4em 0; color: var(--ink); }
+.cover .meta { margin-top: 1em; font-size: .95em; }
+.cover .meta div { margin: .15em 0; }
+.blank { display: inline-block; border-bottom: 1px solid var(--ink); min-width: 10em; }
+.note { border: 1px solid var(--line); background: var(--soft); padding: .7em 1em; margin: 1em 0; }
+.alert { border: 2px solid var(--warn); padding: .7em 1em; margin: 1em 0; }
+.alert strong:first-child { color: var(--warn); }
+.tag { display: inline-block; border: 1.5px solid var(--warn); color: var(--warn); font-weight: bold; font-size: .78em; line-height: 1.4; padding: 0 .35em; margin: 0 .2em; border-radius: 3px; white-space: nowrap; vertical-align: .08em; }
+.tag.sim { border-style: dashed; border-color: var(--muted); color: var(--muted); }
+.step { border: 1px solid var(--line); border-left: 6px solid var(--brand); padding: .4em 1em .8em; margin: 1.1em 0; break-inside: avoid; }
+.screen { border: 1px solid #bdbdbd; background: #f2f2f2; color: #444; font-size: .9em; padding: .3em .8em; margin: .6em 0; }
+.unv { border: 2px solid var(--warn); padding: .4em .9em; margin: .7em 0; break-inside: avoid; }
+.unv .if { display: block; margin-top: .2em; }
+.keep { break-inside: avoid; }
+.step > h4:first-child { margin-top: .5em; }
+.lbl { display: inline-block; font-weight: bold; font-size: .85em; padding: 0 .5em; margin-right: .4em; border: 1.5px solid currentColor; border-radius: 3px; }
+.do .lbl { color: var(--brand); }
+.ok { border-left: 4px solid var(--ok); padding: .2em .8em; margin: .6em 0; }
+.ok .lbl { color: var(--ok); }
+.ng { border-left: 4px dotted var(--ng); padding: .2em .8em; margin: .6em 0; }
+.ng .lbl { color: var(--ng); }
+.copy { position: relative; margin: .6em 0; }
+.copy pre { margin: 0; padding: .7em 5.2em .7em .8em; background: #f7f7f2; border: 1.5px solid #8a8a7a; border-radius: 4px; white-space: pre-wrap; overflow-wrap: anywhere; font-family: Consolas, "Microsoft JhengHei", "微軟正黑體", monospace; font-size: .95em; line-height: 1.6; }
+.copy-btn { position: absolute; top: .4em; right: .4em; font: inherit; font-size: .85em; padding: .15em .7em; border: 1px solid var(--brand); background: #fff; color: var(--brand); border-radius: 3px; cursor: pointer; }
+.copy-btn.done { background: var(--ok); color: #fff; border-color: var(--ok); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two > div { min-width: 0; }
+.two .h { font-weight: bold; font-size: .9em; color: var(--brand); }
+.sample { border: 1.5px dashed var(--muted); padding: .5em .9em; margin: .6em 0; background: #fcfcfc; }
+.sample .cap { font-size: .85em; color: var(--muted); font-weight: bold; }
+.toc ol { padding-left: 1.4em; margin: .3em 0; }
+.toc a { color: var(--brand); text-decoration: none; }
+.small { font-size: .9em; color: var(--muted); }
+@media (max-width: 640px) { .two { grid-template-columns: 1fr; } }
+@page { size: A4; margin: 15mm 14mm; }
+@media print {
+  body { max-width: none; padding: 0; font-size: 10.5pt; line-height: 1.6; }
+  .copy-btn { display: none; }
+  .copy pre { padding-right: .8em; }
+  a { color: inherit; text-decoration: none; }
+  h2, h3, h4 { break-after: avoid; }
+  table, .note, .alert, .copy, .sample, .ok, .ng, .step, .keep, .unv { break-inside: avoid; }
+  .two { grid-template-columns: 1fr; gap: 4px; }
+  .step.long { break-inside: auto; }
+  .cover { break-after: page; }
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <p class="t1">AI 系統開發兵法</p>
+  <p class="t2">固定開發流程包</p>
+  <p class="t3">說明書二：第一次使用</p>
+  <div class="meta">
+    <div>版本：1.0</div>
+    <div>日期：2026-11-25</div>
+    <div>練習題目：午餐分帳計算機（第一次大約 1 小時，做完任務卡 01 就算完成）</div>
+    <div>維護人：<span class="blank">＿＿＿＿</span>（請維護人填寫聯絡方式）</div>
+  </div>
+  <div class="alert"><strong>先講清楚：</strong>這份教學<strong>還沒有在真正的 Claude 桌面 App 或 ChatGPT 桌面 App 裡從頭到尾跑過一次</strong>。之後維護人會在真的電腦上從頭做一次，再修正這份說明。每一步「AI 會回什麼」是依照各技能的說明檔寫的，不是真的對話紀錄；你看到的和這裡寫的不一樣很正常，請照實回報給維護人（做法在最後一節）。兩種標示：
+  <ul>
+  <li><span class="screen" style="display:inline-block;margin:0">灰色一行</span>：App 畫面（按鈕、選資料夾的位置）沒核對過，以你看到的為準。</li>
+  <li><span class="tag">未實測 #編號</span> 紅框：<strong>結果</strong>可能不一樣，後面寫了「如果不一樣」該怎麼辦；全部列在第 11 章。</li>
+  </ul></div>
+</div>
+
+<nav class="toc">
+<strong>目錄</strong>
+<ol start="0">
+<li><a href="#c0">這份教學怎麼用</a></li>
+<li><a href="#c1">準備（只做一次）</a></li>
+<li><a href="#c2">第 1 步：追問需求</a></li>
+<li><a href="#c3">第 2 步：寫規格</a></li>
+<li><a href="#c4">第 3 步：切任務卡，存第一個版本</a></li>
+<li><a href="#c5">第 4 步：先測試再實作</a></li>
+<li><a href="#c6">第 5 步：獨立審查</a></li>
+<li><a href="#c7">第 6 步：交付與檢討</a></li>
+<li><a href="#c8">下一張任務卡、對話太長時</a></li>
+<li><a href="#c9">三個補充工具什麼時候用</a></li>
+<li><a href="#c10">用 Cursor／Antigravity（基本版）的人</a></li>
+<li><a href="#c11">回報給維護人</a></li>
+<li><a href="#c12">看不懂的詞</a></li>
+</ol>
+</nav>
+
+<!-- ===================== 0 ===================== -->
+<h2 id="c0">0　這份教學怎麼用</h2>
+<p>你會跟著做一個很小的工具：<strong>午餐分帳計算機</strong>。它是一個網頁檔，用滑鼠按兩下就能在瀏覽器打開，輸入總金額和人數，算出每個人要付多少。選它的理由：</p>
+<ul>
+<li>不用裝任何額外軟體，不用帳號、不用網路、不碰公司系統。</li>
+<li>做出來好不好，<strong>你自己打開來用就知道</strong>，不需要看得懂程式。</li>
+<li>夠小。第一次大約要 1 小時（AI 會問好幾輪問題、跑好幾輪測試）；<strong>做完任務卡 01 就算完成</strong>，其他任務卡之後再做。</li>
+</ul>
+
+<h3>整條流程（主線）</h3>
+<p><strong>準備</strong> → 1 追問需求 → 2 寫規格 → 3 切任務卡 → 4 先測試再實作 → 5 獨立審查 → 6 交付與檢討</p>
+<p>每一步都寫：這一步在做什麼、你要打什麼、AI 會回什麼樣的東西、你要做的決定、怎樣算完成、常見卡住點。</p>
+
+<h3>開始前要有的</h3>
+<ul>
+<li>已經照<strong>說明書一</strong>裝好，而且重開過 App。</li>
+<li><strong>Git</strong>（存版本的免費程式）最好有。沒有也能練習，但「存版本」和「獨立審查」兩步要改用替代做法，下面會寫。</li>
+</ul>
+
+<h3>兩個 App 的叫法不一樣</h3>
+<table>
+<tr><th></th><th>Claude 桌面 App（Code 分頁）</th><th>ChatGPT 桌面 App 裡的 Codex</th></tr>
+<tr><td>怎麼叫出一個技能</td><td>打斜線加完整名稱，例如 <code>/mattpocock-skills:grill-me</code></td><td>打 <code>$</code>，從清單選名稱，例如 <code>$grill-me</code></td></tr>
+<tr><td>本包裹的技能</td><td><code>/dev-bingfa:commit</code> 這種，前綴是 <code>dev-bingfa:</code></td><td><code>$commit</code>，沒有前綴</td></tr>
+<tr><td>如果清單上的名字和這裡不同</td><td colspan="2">以你的清單為準，選看起來對應的那一個。</td></tr>
+</table>
+<div class="unv"><span class="tag">未實測 #1</span>Codex 用 <code>$</code> 叫技能、名字沒有前綴，是照官方文件寫的，還沒在真的 App 上看過（說明書一 #2）。Claude 直接打短名稱（例如 <code>/grill-me</code>）能不能用也沒確認，所以一律寫完整名稱。
+<span class="if"><strong>如果不一樣：</strong>以你的清單上的名字為準；短名稱沒反應就打完整名稱。</span></div>
+<p class="small">指令後面空一格再接一句話，是想把說明一起送出去。</p>
+<div class="unv"><span class="tag">未實測 #2</span>指令後面接的那句話，AI 看不看得到，沒有測過。
+<span class="if"><strong>如果不一樣：</strong>AI 好像沒看到後面的話 → 先只送指令，等它問你再說明。</span></div>
+<p class="small">按「複製」沒反應：用滑鼠把框裡的字整段選起來，按 Ctrl+C。</p>
+
+<h3>哪些技能只有你能啟動</h3>
+<table>
+<tr><th>只有你能啟動（AI 會建議你打，但不會自己開始）</th><th>AI 也能自己啟動（你也可以叫）</th></tr>
+<tr><td><code>setup-matt-pocock-skills</code>、<code>grill-me</code>、<code>grill-with-docs</code>、<code>to-spec</code>、<code>to-tickets</code>、<code>commit</code>、<code>retro</code>、<code>handoff</code></td><td><code>tdd</code>、<code>code-review</code>、<code>pr</code>、<code>brownfield-recon</code>、<code>blast-radius</code>、<code>seam-audit</code></td></tr>
+</table>
+<p>為什麼要分？左邊這些都是「決定方向」或「留下紀錄」的事：要做什麼、怎麼切、什麼時候存版本，應該由人拍板。在 Claude，這是程式擋住的；在 Codex，主要靠規則檔裡的文字約束 AI——所以 Codex 的 AI 如果自己說要開始左邊的技能，請提醒它「這個要等我叫」（說明書一 #4）。</p>
+<p><strong>存版本的例外</strong>：<code>commit</code> 這個技能只能由你叫；但規則也允許 AI 把存版本這件事交給它的「實作助手」去做（主對話自己不會存）。如果 AI 說「已經請助手存好版本了」，請它告訴你版本編號，獨立審查要用。</p>
+
+<p class="note">看到 <span class="tag sim">示意</span> 框住的內容，是「大概長這樣」的例子，<strong>不是</strong>真的 AI 回覆。真的回覆文字、長短都會不一樣。</p>
+
+<!-- ===================== 1 ===================== -->
+<h2 id="c1">1　準備（只做一次）</h2>
+<p class="screen">本章和後面各章的 App 畫面描述（開新對話、選資料夾、本機或雲端的選項）還沒在真的 App 上核對過，以你看到的為準。</p>
+
+<div class="step">
+<h4>1-1　開一個空的專案資料夾</h4>
+<div class="do"><span class="lbl">要做什麼</span>在檔案總管新建這個資料夾（裡面先什麼都不要放）：</div>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>C:\practice\lunch-split</pre></div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>有一個空資料夾。</div>
+</div>
+
+
+<div class="step">
+<h4>1-2　在這個資料夾開新對話</h4>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div>在 Code 分頁開新對話，工作資料夾選 <code>C:\practice\lunch-split</code>。</div>
+<div><div class="h">Codex</div>把 <code>C:\practice\lunch-split</code> 加成一個專案，在這個專案開新對話。</div>
+</div>
+<p class="small">畫面可能略有不同——重點是「這個對話的資料夾是練習用的資料夾」，不是包裹資料夾。如果畫面讓你選「本機（Local）」或「雲端（Cloud／Remote）」，<strong>選本機</strong>，雲端的 AI 讀不到你電腦上的資料夾（選項名稱沒核對過）。之後每次開新對話都一樣。</p>
+</div>
+
+<div class="step">
+<h4>1-3　確認有沒有 Git，有就設好</h4>
+<div class="do"><span class="lbl">要做什麼</span>在對話裡貼上：</div>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請先幫我確認這台電腦有沒有安裝 Git。有的話，把這個資料夾設成 Git 專案（只做 git init，先不要做別的）；沒有的話，告訴我就好，不要幫我安裝任何東西。</pre></div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>AI 說已經把資料夾設成 Git 專案（可能會提到 <code>git init</code>）；或者說這台電腦沒有 Git。</div>
+<div class="ng"><span class="lbl">沒有 Git 的話</span>照樣往下做。差別只有兩處：「存一個版本」那幾步跳過（並記得這次練習沒有存版本）；「獨立審查」改用第 5 步（本說明書第 6 章）寫的替代做法。之後想裝 Git，請問公司 IT 或維護人。</div>
+<h4>有 Git 的話：設定這個專案的名字和 email</h4>
+<p>Git 每存一個版本，都要記下「是誰存的」（一個名字和一個 email）。新電腦沒設過，第一次存版本就會失敗。下面這句只設在<strong>這個練習資料夾</strong>，不影響電腦上其他東西；版本紀錄只存在你電腦上、不會上傳，所以 email 用一個假的就好。把【】換成你想用的名字或英文代號：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請只為這個專案資料夾設定 Git 的名字和 email：名字用「【你的名字或英文代號】」，email 用 practice@example.com。只用 git config，不要加 --global。設好後告訴我。</pre></div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>AI 說已經設好這個專案的名字和 email。</div>
+<div class="unv"><span class="tag">未實測 #4</span>AI 幫你設定這兩項，沒有在真的 App 裡試過。
+<span class="if"><strong>如果不一樣：</strong>設不起來 → 把這次練習當成「沒有 Git」：存版本跳過，獨立審查用第 6 章的替代做法（審查不能跳過，替代做法一樣算數）。</span></div>
+</div>
+
+<div class="step">
+<h4>1-4　第一次用 Matt 的工具：跑一次設定</h4>
+<p><strong>這一步在做什麼</strong>：告訴 Matt 的工具「這個專案的任務卡放哪裡」。每個專案只要做一次。</p>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/mattpocock-skills:setup-matt-pocock-skills</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$setup-matt-pocock-skills</pre></div></div>
+</div>
+<p><strong>AI 會回什麼</strong>：它先看一下資料夾裡有什麼，告訴你找到和缺少什麼，然後<strong>一次問一個問題</strong>，每題都先講它建議的答案：</p>
+<ol>
+<li><strong>任務卡放哪裡</strong>（它叫 issue tracker）：選項有 GitHub、GitLab、本地檔案（Local markdown）、其他。</li>
+<li><strong>分類標籤要不要用預設的</strong>：回答「要」（yes）即可。</li>
+<li>它會給你看準備寫進去的內容草稿。因為資料夾裡還沒有規則檔，它會問你要建立 <code>CLAUDE.md</code> 還是 <code>AGENTS.md</code>。</li>
+</ol>
+<p><strong>你要做的決定</strong>：</p>
+<ul>
+<li>任務卡：選<strong>本地檔案</strong>，回答：<code>本地檔案（Local markdown）</code>。任務卡會變成專案資料夾裡的一個個檔案。已經在用 GitHub Issues 管工作的團隊，可以在這裡改選 GitHub，但那需要專案已經放上 GitHub，請先問維護人。</li>
+<li>規則檔：用 Claude 的人選 <code>CLAUDE.md</code>，用 Codex 的人選 <code>AGENTS.md</code>。（這是<strong>這個專案自己的</strong>規則檔，放在專案資料夾裡，和說明書一裝的那份不一樣，不會互相蓋掉。）</li>
+</ul>
+<div class="ok"><span class="lbl">怎樣算完成</span>AI 說設定完成。專案資料夾裡多了 <code>docs\agents\</code> 資料夾（裡面有 <code>issue-tracker.md</code> 等檔案），以及你選的那個規則檔。</div>
+<div class="ng"><span class="lbl">常見卡住點</span>
+<ul>
+<li>AI 開始問你 GitHub 網址 → 你可能選到 GitHub 了，跟它說「改選本地檔案」。</li>
+<li>清單裡找不到這個技能 → 回說明書一第 9 章「看不到指令」。</li>
+</ul></div>
+</div>
+
+<!-- ===================== 2 ===================== -->
+<h2 id="c2">2　第 1 步：追問需求</h2>
+<p><strong>這一步在做什麼</strong>：讓 AI 一直問你問題，直到你們對「要做什麼」的理解完全一樣。很多做錯的東西，其實是一開始沒講清楚。</p>
+
+<div class="step long">
+<h4>你要打什麼</h4>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/mattpocock-skills:grill-me 我想做一個「午餐分帳計算機」：一個按兩下就能用瀏覽器打開的網頁檔，不需要安裝任何東西、不用網路。輸入總金額和人數，算出每個人要付多少。我不會寫程式，測試結果要讓我自己看得到。這是一個小練習，請把範圍控制在最小。</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$grill-me 我想做一個「午餐分帳計算機」：一個按兩下就能用瀏覽器打開的網頁檔，不需要安裝任何東西、不用網路。輸入總金額和人數，算出每個人要付多少。我不會寫程式，測試結果要讓我自己看得到。這是一個小練習，請把範圍控制在最小。</pre></div></div>
+</div>
+<p class="small">為什麼用 <code>grill-me</code>？這是一次性的小練習。長期的專案改用 <code>grill-with-docs</code>（<code>/mattpocock-skills:grill-with-docs</code>／<code>$grill-with-docs</code>）：它問法一樣，但會順手把專案用語記到 <code>GLOSSARY.md</code>、把重要決定記成決策紀錄。</p>
+
+<h4>AI 會回什麼</h4>
+<p>一輪一輪的編號問題。每一題都附上它建議的答案，而且問法設計成「你回答『是』就等於接受建議」。它能自己查到的事實不會來問你，只問需要你決定的事。</p>
+<div class="sample"><div class="cap">大概長這樣 <span class="tag sim">示意</span></div>
+❓ <strong>Q1 - 服務費</strong>：很多餐廳會加收一成服務費。計算機要不要有「加一成服務費」的選項？<br>
+➡️ 建議：要，做成一個勾選框，預設不勾。<br><br>
+❓ <strong>Q2 - 除不盡的零頭</strong>：1000 元 3 個人分，每人 333.33 元。要怎麼處理？<br>
+➡️ 建議：每人金額無條件進位到整數元，並顯示「多收了幾元」。
+</div>
+
+<h4>你要做的決定</h4>
+<ul>
+<li>每一題回答「是」，或寫出你要的答案，例如：<code>Q1 是；Q2 改成四捨五入</code>。</li>
+<li>這個練習會碰到的典型決定：服務費要不要算、零頭怎麼處理、人數最多幾個、打錯（例如人數填 0）時畫面要說什麼。</li>
+<li><strong>測試要怎麼讓你看得到</strong>：建議回答「測試做成一個我按兩下就能打開的自我測試頁，打開就看得到每一項是通過還是失敗」。這樣不管電腦上有沒有其他程式，你都能自己確認。</li>
+</ul>
+<div class="ok"><span class="lbl">怎樣算完成</span>AI 說已經沒有要問的了，並請你確認「我們的理解一致」。你回答同意。<strong>這一步 AI 還不會寫程式</strong>，這是正常的。</div>
+<div class="ng"><span class="lbl">常見卡住點</span>
+<ul>
+<li>問題太多 → 回它：<code>這是一個小練習，請把範圍縮到最小，剩下的都用你建議的答案。</code></li>
+<li>AI 直接開始寫程式 → 請它停下來：<code>先不要寫程式，我們還在問需求。</code></li>
+</ul></div>
+<div class="unv"><span class="tag">未實測 #3</span>（Codex）<code>grill-me</code>、<code>grill-with-docs</code>、<code>retro</code> 的說明檔叫 AI「用 Skill tool 去叫另一個技能」。Skill tool 是 Claude 的工具名，Codex 有沒有同樣的東西不知道。
+<span class="if"><strong>如果不一樣：</strong>AI 說找不到 Skill tool → 回它：<code>請直接照 grilling 這個 skill 的步驟做。</code><code>grill-with-docs</code> 回：<code>請直接照 grilling 和 domain-modeling 這兩個 skill 的步驟做。</code><code>retro</code> 回：<code>請先讀 writing-for-agents 這個 skill，再照 retro 的步驟做。</code></span></div>
+</div>
+
+<!-- ===================== 3 ===================== -->
+<div class="keep">
+<h2 id="c3">3　第 2 步：寫規格</h2>
+<p><strong>這一步在做什麼</strong>：把剛剛問清楚的東西，整理成一份寫下來的規格。之後每一步都照這份做，大家看的是同一份。</p>
+
+<div class="step">
+<h4>你要打什麼（在同一個對話接著打）</h4>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/mattpocock-skills:to-spec</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$to-spec</pre></div></div>
+</div>
+<h4>AI 會回什麼</h4>
+<p>它<strong>不會再問一輪</strong>，而是直接整理剛才的對話。寫之前，它會先跟你確認「要從哪裡測試」——它叫 seam，意思是「測試從哪個入口檢查」，例如「給總金額、人數、要不要服務費 → 檢查每人金額」。確認後，它把規格寫成一個檔案，位置大概是 <code>.scratch\午餐分帳之類的名稱\spec.md</code>。</p>
+<p>規格裡會有這幾段（英文標題）：Problem Statement（問題）、Solution（解法）、User Stories（一長串「身為……我想要……以便……」）、Implementation Decisions（實作上的決定）、Testing Decisions（測試怎麼做）、Out of Scope（這次不做的事）。</p>
+<h4>你要做的決定</h4>
+<ul>
+<li>測試入口：聽起來是「從使用者會做的事去檢查」就同意。</li>
+<li>用記事本打開 <code>spec.md</code>，至少讀 Problem Statement、Solution、Out of Scope 三段。有不對的地方，直接用中文告訴 AI 要改什麼。</li>
+</ul>
+<div class="ok"><span class="lbl">怎樣算完成</span><code>spec.md</code> 存在，你讀過，覺得「對，就是要做這個、不做那些」。</div>
+<div class="ng"><span class="lbl">常見卡住點</span>
+<ul>
+<li>AI 說要先跑 <code>setup-matt-pocock-skills</code> → 回去做 1-4。</li>
+<li>User Stories 很長 → 正常，它的設計就是列很多。重點看 Out of Scope 有沒有把不要的東西排除掉。</li>
+</ul></div>
+</div>
+
+</div>
+<!-- ===================== 4 ===================== -->
+<div class="keep">
+<h2 id="c4">4　第 3 步：切任務卡，存第一個版本</h2>
+<p><strong>這一步在做什麼</strong>：把規格切成幾張小的「任務卡」。每一張做完都能單獨看到成果，一張卡用一個對話做完。</p>
+
+<div class="step">
+<h4>你要打什麼</h4>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/mattpocock-skills:to-tickets 這是小工具，請切成 2 到 3 張任務卡。</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$to-tickets 這是小工具，請切成 2 到 3 張任務卡。</pre></div></div>
+</div>
+<h4>AI 會回什麼</h4>
+<p>先給你一份編號清單，每張卡有：標題、被哪幾張卡擋住（要先做完哪張才能做這張）、做完能看到什麼。然後問你：粗細合不合適、先後順序對不對、要不要合併或拆開。</p>
+<div class="sample"><div class="cap">大概長這樣 <span class="tag sim">示意</span></div>
+1. <strong>基本平分</strong>　被擋住：無　做完能看到：輸入總金額和人數，顯示每人金額<br>
+2. <strong>服務費與零頭</strong>　被擋住：1　做完能看到：勾選服務費、零頭照規則處理並顯示<br>
+3. <strong>打錯時的提示</strong>　被擋住：1　做完能看到：人數填 0 或空白時有清楚的提示
+</div>
+<p>你同意後，它把每張卡存成一個檔案：<code>.scratch\…\issues\01-….md</code>、<code>02-….md</code>……每個檔案裡有一份打勾清單（驗收條件）。</p>
+<h4>你要做的決定</h4>
+<p>張數和順序。聽起來合理就回答「同意」。</p>
+<div class="ok"><span class="lbl">怎樣算完成</span><code>issues</code> 資料夾裡有 2～3 個 <code>.md</code> 檔。</div>
+</div>
+</div>
+
+<div class="step">
+<h4>存第一個版本（有 Git 才做）</h4>
+<p><strong>為什麼現在存</strong>：等一下的獨立審查需要知道「從哪裡開始比」。現在存一個版本，就是那個起點。</p>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/dev-bingfa:commit</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$commit</pre></div></div>
+</div>
+<p><strong>AI 會回什麼</strong>：它先看有哪些改動，一個一個寫出檔名加進去，寫一句版本說明，然後存版本。它只存在你電腦上，不會上傳。最後會給你一個版本編號（一串英文數字，前 7 碼就夠）。</p>
+<p><strong>你要做的決定</strong>：把版本編號記下來，例如寫在便條紙上：「存檔點 1：＿＿＿＿＿＿＿」。</p>
+<div class="ok"><span class="lbl">怎樣算完成</span>AI 說已經提交，並給出版本編號。AI 沒給版本編號，就問它：<code>剛剛那個版本的編號是什麼？</code></div>
+<div class="ng"><span class="lbl">常見卡住點</span>
+<ul>
+<li>Git 說它不知道你是誰（沒有名字和 email）→ 回到 1-3 的「設定這個專案的名字和 email」，貼那一句，設好再存一次。</li>
+<li>它問「改動好像混了好幾件事，要不要全部一起存？」→ 回答：<code>全部一起存，這是第一個版本。</code></li>
+<li>沒有 Git → 跳過，記得這次沒有存檔點。</li>
+</ul></div>
+</div>
+
+<!-- ===================== 5 ===================== -->
+<h2 id="c5">5　第 4 步：先測試再實作</h2>
+<p><strong>這一步在做什麼</strong>：AI 一次只做一小塊：先寫一個「現在一定會失敗」的測試（紅燈），再寫剛好讓它通過的程式（綠燈），然後下一小塊。這樣每一塊都有測試守著。</p>
+
+<div class="step long">
+<h4>你要打什麼</h4>
+<p>建議<strong>開一個新對話</strong>（同一個練習資料夾）做任務卡 01。一張卡一個對話，AI 比較不會混亂。把下面的路徑換成你資料夾裡任務卡 01 的實際檔名：</p>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/mattpocock-skills:tdd 請做任務卡 .scratch\【資料夾名】\issues\【01 開頭的檔名】，規格在同一個資料夾的 spec.md。測試請做成我按兩下就能打開的自我測試頁，結果寫在頁面上。不要安裝任何軟體。這台電腦可能沒有 Node 或 Python；你要自己跑測試時，可以用 Windows 內建的 Edge 無頭模式（msedge --headless --dump-dom 加上自我測試頁的 file:/// 網址）讀出頁面上的結果。</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$tdd 請做任務卡 .scratch\【資料夾名】\issues\【01 開頭的檔名】，規格在同一個資料夾的 spec.md。測試請做成我按兩下就能打開的自我測試頁，結果寫在頁面上。不要安裝任何軟體。這台電腦可能沒有 Node 或 Python；你要自己跑測試時，可以用 Windows 內建的 Edge 無頭模式（msedge --headless --dump-dom 加上自我測試頁的 file:/// 網址）讀出頁面上的結果。</pre></div></div>
+</div>
+<p class="small">不知道檔名？直接說「請做 issues 資料夾裡編號 01 的任務卡」也可以。為什麼提 Edge：AI 要親眼看到紅燈、綠燈，需要一個能執行網頁程式的東西；Windows 本來就有 Edge，不用另外裝。</p>
+<div class="unv"><span class="tag">未實測 #5</span>用 Edge 無頭模式讀自我測試頁的結果，審查者在一台 Windows 電腦上直接執行過（印出了「通過 2/2」）；但 Claude 或 Codex App 裡的 AI 能不能這樣開 Edge（例如 Codex 的安全限制擋不擋），沒有試過。
+<span class="if"><strong>如果不一樣：</strong>AI 說它開不了 Edge、也跑不了測試 → 請它說清楚是怎麼確認的，然後你自己按兩下打開自我測試頁看。AI 要安裝 Node、Python 或其他軟體 → <strong>按拒絕</strong>，回它：<code>不要安裝任何軟體，請用自我測試頁。</code></span></div>
+
+<h4>AI 會回什麼</h4>
+<ol>
+<li>先列出它打算測試的入口，每個附一句「這能抓到什麼、抓不到什麼」，請你確認。<strong>你沒確認之前，它不會寫測試。</strong></li>
+<li>然後一輪一輪：寫一個測試 → 說明它現在失敗 → 寫程式 → 說明它通過。</li>
+<li>最後告訴你做了哪些檔案（例如計算機網頁、自我測試頁），以及它是怎麼確認測試通過的。</li>
+</ol>
+
+<h4>你要做的決定，和你自己要驗的事</h4>
+<ul>
+<li>確認測試入口（聽起來是「照使用者會做的事檢查」就同意）。</li>
+<li><strong>自己打開來用</strong>：在檔案總管找到計算機網頁，按兩下打開。<strong>只驗這張卡的驗收條件</strong>（任務卡檔案裡的打勾清單）。下表是整個計算機的驗收例子，「哪張卡做完才驗」對不上這張卡的列，等那張卡做完再驗：</li>
+</ul>
+<table>
+<tr><th>輸入</th><th>你自己先算</th><th style="width:16%">畫面顯示</th><th>哪張卡做完才驗（以示意的切法為例）</th></tr>
+<tr><td>總金額 1000、人數 4、不加服務費</td><td>每人 250</td><td>＿＿＿＿</td><td>01 基本平分</td></tr>
+<tr><td>總金額 1000、人數 3、不加服務費</td><td>照你決定的零頭規則算</td><td>＿＿＿＿</td><td>02 服務費與零頭</td></tr>
+<tr><td>人數填 0</td><td>應該出現提示，而不是奇怪的數字</td><td>＿＿＿＿</td><td>03 打錯時的提示</td></tr>
+</table>
+<p class="small">你的任務卡切法可能和示意不同，以你的任務卡檔案為準。</p>
+<ul>
+<li>打開自我測試頁，看是不是全部通過。</li>
+</ul>
+<div class="ok"><span class="lbl">怎樣算完成</span>這張任務卡的驗收條件都做到了；自我測試頁全部通過；你自己試的、屬於這張卡的數字都對。</div>
+<div class="ng"><span class="lbl">常見卡住點</span>
+<ul>
+<li>AI 一口氣寫完所有測試才寫程式 → 提醒它：<code>請一次只做一個測試，紅燈再綠燈。</code></li>
+<li>AI 說它沒辦法自己執行測試 → 請它說清楚是怎麼確認的，並給你自我測試頁自己打開看。規則要求它不能說「做好了」卻不說它沒驗證什麼。</li>
+<li>這個練習是網頁，不是 Python，所以 Claude 版的「存檔自動檢查」不會跳出提醒，這是正常的。</li>
+</ul></div>
+</div>
+
+<div class="step">
+<h4>存第二個版本（有 Git 才做）</h4>
+<p>做完任務卡 01，再存一次版本（指令和第 3 步一樣：<code>/dev-bingfa:commit</code>／<code>$commit</code>）。獨立審查會比較「存檔點 1」到「現在」之間的差別，所以要先存起來。這次的版本編號也記下來：「存檔點 2：＿＿＿＿＿＿＿」。</p>
+</div>
+
+<!-- ===================== 6 ===================== -->
+<h2 id="c6">6　第 5 步：獨立審查</h2>
+<p><strong>這一步在做什麼</strong>：找「另一雙眼睛」檢查剛做好的東西。</p>
+<p><strong>為什麼要「另一雙眼睛」</strong>：寫程式的那個對話，腦子裡裝滿了「我本來想怎麼做」，審自己的東西很容易看到自己想看的。<code>code-review</code> 會另外派出兩個<strong>全新的助手</strong>（看不到之前的聊天內容），一個只檢查「有沒有照專案的寫法規矩」（Standards），一個只檢查「有沒有照規格做」（Spec），兩份報告分開給你。</p>
+<p class="alert"><strong>這一步不能跳過。</strong>依維護人的決定，只有「改一行的小修正」可以跳過整個流程；其他改動都要做獨立審查。</p>
+
+<div class="step">
+<h4>你要打什麼</h4>
+<p>把【】換成你記下的存檔點 1 編號和實際路徑（做後面的任務卡時，換成<strong>這張卡開始前</strong>的存檔點，見第 8 章）。</p>
+<div class="two">
+<div><div class="h">Claude 桌面 App（在做任務卡的那個對話接著打即可，審查會自己派出全新的助手）</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/mattpocock-skills:code-review 請審查從 commit 【存檔點 1 編號】 之後的改動。規格是 .scratch\【資料夾名】\spec.md，任務卡是 issues 資料夾裡編號 01 的那張。</pre></div></div>
+<div><div class="h">Codex（一定要<strong>先開一個全新的對話</strong>，同一個練習資料夾，再打）</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$code-review 請審查從 commit 【存檔點 1 編號】 之後的改動。規格是 .scratch\【資料夾名】\spec.md，任務卡是 issues 資料夾裡編號 01 的那張。請派兩個全新的子助手（subagent），分別做 Standards 和 Spec。</pre></div></div>
+</div>
+<p class="small">Claude 一定要打完整名稱 <code>/mattpocock-skills:code-review</code>：Claude 自己也有一個同名的 <code>/code-review</code>，那是另一個東西。</p>
+<p class="small">為什麼 Codex 要開新對話：Codex 不一定會自己派出新助手，可能就在寫程式的那個對話裡審完，那就不算「另一雙眼睛」，而且不會有人告訴你。全新的對話看不到寫程式時的聊天，不管它派不派助手，審查都是獨立的。</p>
+<div class="unv"><span class="tag">未實測 #6</span>Codex 的 <code>code-review</code> 會不會真的派出兩個全新的助手，沒有測過。
+<span class="if"><strong>如果不一樣：</strong>它說做不到派助手 → 沒關係，你已經在全新的對話裡，請它照樣分 Standards 和 Spec 兩部分審完。</span></div>
+
+<h4>AI 會回什麼</h4>
+<div class="sample"><div class="cap">大概長這樣 <span class="tag sim">示意</span></div>
+<strong>## Standards</strong>（寫法規矩）<br>1. 計算和畫面的程式混在一起，難以單獨測試（判斷題）……<br><br>
+<strong>## Spec</strong>（有沒有照規格）<br>1. 規格寫「人數最多 20 人」，但輸入 50 也能算（缺漏）……<br><br>
+總結：Standards 1 項、Spec 1 項；各自最嚴重的是……
+</div>
+<h4>你要做的決定</h4>
+<ul>
+<li>每一項要不要改。看不懂的，請它用白話再解釋一次。</li>
+<li>決定後跟 AI 說，例如：<code>請修 Spec 第 1 項；Standards 第 1 項這次不改，因為這是練習。</code></li>
+<li>修完再自己打開網頁試一次，再存一個版本。</li>
+</ul>
+<div class="ok"><span class="lbl">怎樣算完成</span>每一項都有決定（改了，或說明為什麼不改），修完你自己試過。</div>
+<div class="ng"><span class="lbl">常見卡住點</span>
+<ul>
+<li>AI 說「沒有改動可以比」→ 通常是做完任務卡忘了存版本。先存版本再審。</li>
+<li><strong>沒有 Git（或 Git 的名字和 email 設不起來）</strong>：審查需要「從哪裡開始比」，沒有存檔點就不能用 <code>code-review</code>。改用這個做法：開一個<strong>全新的對話</strong>（同一個資料夾），貼上：</li>
+</ul>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請審查這個資料夾裡的計算機網頁和自我測試頁，對照 .scratch\【資料夾名】\spec.md 和 issues 資料夾裡編號 01 的任務卡。
+請分兩部分回報：一、寫法上的問題；二、規格要求但沒做到、或做了規格沒要求的東西。
+請只審查、不要修改任何檔案。每一項附上檔案位置和理由，按嚴重程度排列。</pre></div>
+<div class="unv"><span class="tag">未實測 #7</span>這個沒有 Git 時的替代審查做法沒有在真的 App 裡試過。
+<span class="if"><strong>如果不一樣：</strong>回覆看起來不像審查報告（沒有分兩部分、沒有檔案位置）→ 請它照上面的格式重寫；還是不行，回報維護人。這一步不能因為這樣就跳過。</span></div>
+</div>
+</div>
+
+<!-- ===================== 7 ===================== -->
+<h2 id="c7">7　第 6 步：交付與檢討</h2>
+
+<div class="keep">
+<h3>看懂 AI 交付時的三個標題</h3>
+<p>照規則，AI 每次交付都要用這三個標題收尾。<strong>先讀第一個</strong>：</p>
+<table>
+<tr><th>標題</th><th>意思</th><th>你要怎麼看</th></tr>
+<tr><td><strong>Blocked on me</strong></td><td>卡在你這裡的事</td><td>需要你決定或處理的東西。這裡有東西，就是 AI 在等你。寫「無」才代表不用你動手。</td></tr>
+<tr><td><strong>Changed</strong></td><td>改了什麼</td><td>改了哪些檔案、做了什麼。對照任務卡，看有沒有多做或少做。</td></tr>
+<tr><td><strong>Found</strong></td><td>發現了什麼</td><td>過程中發現的問題、它猜的地方、漏掉或放棄的東西，以及<strong>你在哪裡看得到</strong>。這段最容易被跳過，請一定要看。</td></tr>
+</table>
+</div>
+<p>如果 AI 沒有這三個標題，或沒說它漏了什麼、猜了什麼，請它補：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請補上：漏了什麼、放棄了什麼、猜了什麼，各在哪裡看得到，並用 Blocked on me／Changed／Found 三個標題收尾。</pre></div>
+
+<h3>你自己驗收</h3>
+<p>最後一關是你：審查的修改做完後，打開計算機網頁，把<strong>這張任務卡</strong>的驗收條件再試一次（第 4 步那張表裡屬於這張卡的列）。AI 說「做好了」不算數，你自己用過、數字對才算。</p>
+
+<h3>存版本</h3>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/dev-bingfa:commit</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$commit</pre></div></div>
+</div>
+<p class="small"><code>commit</code> 這個技能只能由你叫；AI 會建議你打。規則也允許 AI 把存版本交給它的「實作助手」去做，但主對話自己不會存——如果它說「已經請助手存好了」，請它告訴你版本編號。專案資料夾必須是 Git 專案才能存版本，沒有 Git 就跳過，並記得這次的成果沒有存檔點。</p>
+
+<h3>寫 PR 說明：<code>pr</code>（這次練習不用）</h3>
+<p>PR（pull request）是「請別人審核並合併我的改動」的申請，用在團隊把專案放在 GitHub 上的時候。<code>pr</code> 會幫你寫申請說明：改了什麼的簡圖、改動前後的證據、合併的風險有多大。這次練習沒有放上 GitHub，所以不用。需要時打 <code>/mattpocock-skills:pr</code>／<code>$pr</code>。</p>
+
+<h3>事後檢討：<code>retro</code></h3>
+<p>做完一段工作後，請 AI 回頭看這次的對話，提出「下次怎麼更順」的建議。</p>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/mattpocock-skills:retro</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$retro</pre></div></div>
+</div>
+<p><strong>AI 會回什麼</strong>：一份按嚴重程度排的改進建議，例如「可以加一個自動檢查，就不會再犯某個錯」「規則檔哪一句沒有作用」「哪個檔案很難找到」。</p>
+<p><strong>你要做的決定</strong>：哪幾項要採用。不用全部採用；看不懂的請它解釋，或交給維護人判斷。</p>
+<p class="small">它可能想去讀這台電腦上其他的對話紀錄（會跳出確認）。不想讓它讀，就說：<code>只看這次對話就好。</code>Codex 上它說找不到 Skill tool，照第 2 章 #3 的做法回它。</p>
+<div class="ok"><span class="lbl">整個練習怎樣算完成</span>你走完了任務卡 01 的第 1～6 步，計算機屬於這張卡的部分自己用過、數字對，有 Git 的話存了版本，也看過一次檢討建議。剩下的任務卡，照下一節的方式之後再做。</div>
+
+<!-- ===================== 8 ===================== -->
+<h2 id="c8">8　下一張任務卡、對話太長時</h2>
+<ul>
+<li><strong>一個對話只做一張任務卡。</strong>任務卡 02 開一個新對話，從第 4 步「先測試再實作」開始，走到第 6 步。</li>
+<li><strong>每張卡開始前，先記下起點</strong>：問 AI <code>目前最新的存檔點編號是什麼？</code>，記下來。這張卡的獨立審查就「從這個編號之後」開始比，不然會連前一張卡再審一次。</li>
+<li><strong>對話太長、或中途冒出別的事</strong>：請 AI 寫一份交接文件，到新對話接著做。</li>
+</ul>
+<div class="two">
+<div><div class="h">Claude 桌面 App</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>/mattpocock-skills:handoff 下一個對話要接著做任務卡 02。</pre></div></div>
+<div><div class="h">Codex</div><div class="copy"><button class="copy-btn" type="button">複製</button><pre>$handoff 下一個對話要接著做任務卡 02。</pre></div></div>
+</div>
+<p><strong>AI 會回什麼</strong>：它把目前的進度整理成一份文件，存在 Windows 的暫存資料夾（不是專案資料夾），並告訴你檔案位置。到新對話說：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請讀 【交接文件的完整路徑】，接著做。</pre></div>
+
+<!-- ===================== 9 ===================== -->
+<h2 id="c9">9　三個補充工具什麼時候用</h2>
+<p>這個練習是從零開始的單一網頁，三個都用不到。等你改的是「已經存在、很多人在用」的東西時，就會用到。這三個 AI 也可能自己建議或自己啟動。</p>
+<table>
+<tr><th>工具</th><th>什麼時候用</th><th>生活化的例子</th><th>Claude／Codex 打什麼</th></tr>
+<tr><td><code>brownfield-recon</code><br>既有專案探勘</td><td>接手一個不熟的既有專案，在第 1 步之前做一次</td><td>同事留下一個報表小工具，你要改「匯出 Excel」按鈕。先請 AI 從那個按鈕出發畫一份專案地圖 <code>CONTEXT_MAP.md</code>。它只看不改，會先問你要改哪一塊</td><td><code>/dev-bingfa:brownfield-recon</code><br><code>$brownfield-recon</code></td></tr>
+<tr><td><code>blast-radius</code><br>影響範圍檢查</td><td>改到很多地方共用的東西，審查完、正式採用前</td><td>你改了好幾個頁面都在用的「日期顯示格式」。它會列出每一個用到的地方，標出「沒影響／有影響／不確定」，再給你一張按風險排序的手動檢查清單</td><td><code>/dev-bingfa:blast-radius</code><br><code>$blast-radius</code></td></tr>
+<tr><td><code>seam-audit</code><br>接縫對帳</td><td>交付的東西跨了兩個以上的零件（一個產生資料、另一個拿去用），收尾前</td><td>點餐畫面產生「訂單」，另一支程式拿訂單算「月報表」。它逐條檢查兩邊的約定（欄位、格式）有沒有人守、出錯時誰會發現。沒有跨零件時它會直接說不用跑</td><td><code>/dev-bingfa:seam-audit</code><br><code>$seam-audit</code></td></tr>
+</table>
+
+<!-- ===================== 10 ===================== -->
+<h2 id="c10">10　用 Cursor／Antigravity（基本版）的人</h2>
+<div class="unv"><span class="tag">未實測 #8</span>基本版整章（叫技能的方式、手動審查、提交）都沒有在 Cursor、Antigravity 上試過（說明書一 #12）。
+<span class="if"><strong>如果不一樣：</strong>照 <code>基本版\基本版說明.md</code> 的備用說法做；還是不行，回報你的工具名稱和版本。</span></div>
+<ul>
+<li><strong>叫出技能</strong>：用一般的話說，例如 <code>請使用 grill-me 這個 skill，……</code>。只能由你啟動的技能，AI 有可能回答「不能自己啟動」；照 <code>基本版\基本版說明.md</code> 第 3-3 節的做法改用別的叫法。</li>
+<li><strong>獨立審查</strong>：基本版沒有助手，請照 <code>基本版\基本版說明.md</code> 第 3-1 節，<strong>自己開一個全新的對話</strong>來審。</li>
+<li><strong>存檔自動檢查</strong>：基本版沒有，交付前照 3-2 節貼檢查清單。</li>
+<li><strong>提交</strong>：由你自己叫 <code>commit</code>（3-3 節）。</li>
+</ul>
+
+<!-- ===================== 11 ===================== -->
+<h2 id="c11">11　回報給維護人</h2>
+<p>維護人：<span class="blank">＿＿＿＿</span>（請維護人填寫聯絡方式）</p>
+<p>這份教學還沒在真的 App 裡跑過一次，你的回報非常有用。請附上：包裹版本（<code>VERSION</code> 檔的數字）、用哪個 App、做到第幾步、你打了什麼、AI 回了什麼（原文複製或截圖）、和這份說明書不一樣的地方（紅框的寫出編號）。不要附密碼或登入資訊。</p>
+<h3>這份說明書的未實測清單</h3>
+<table>
+<tr><th>編號</th><th>還沒確認的事</th><th>在哪裡</th></tr>
+<tr><td>#1</td><td>Codex 的 <code>$</code> 叫法和名字；Claude 短名稱</td><td><a href="#c0">第 0 章</a></td></tr>
+<tr><td>#2</td><td>指令後面接的那句話 AI 看不看得到</td><td><a href="#c0">第 0 章</a></td></tr>
+<tr><td>#3</td><td>Codex 有沒有「Skill tool」（<code>grill-me</code>、<code>grill-with-docs</code>、<code>retro</code>）</td><td><a href="#c2">第 2 章</a></td></tr>
+<tr><td>#4</td><td>AI 幫你設定這個專案的 Git 名字和 email</td><td><a href="#c1">1-3</a></td></tr>
+<tr><td>#5</td><td>App 裡的 AI 能不能用 Edge 無頭模式跑自我測試頁</td><td><a href="#c5">第 5 章</a></td></tr>
+<tr><td>#6</td><td>Codex 的 <code>code-review</code> 會不會派出全新的助手</td><td><a href="#c6">第 6 章</a></td></tr>
+<tr><td>#7</td><td>沒有 Git 時的替代審查做法</td><td><a href="#c6">第 6 章</a></td></tr>
+<tr><td>#8</td><td>基本版整章</td><td><a href="#c10">第 10 章</a></td></tr>
+</table>
+<p class="small">App 畫面的樣子（開新對話、選資料夾）沒核對的部分，用灰色一行標示，不另外編號。</p>
+
+<!-- ===================== 12 ===================== -->
+<h2 id="c12">12　看不懂的詞</h2>
+<table>
+<tr><th>詞</th><th>意思</th></tr>
+<tr><td>技能（skill）</td><td>寫好的一套做事步驟，AI 照著做。</td></tr>
+<tr><td>規格（spec）</td><td>寫下來的「要做什麼、不做什麼」。</td></tr>
+<tr><td>任務卡（ticket）</td><td>規格切出來的一小塊工作，一張一個檔案，做完能單獨看到成果。</td></tr>
+<tr><td>驗收條件</td><td>任務卡裡的打勾清單，全部做到才算完成。</td></tr>
+<tr><td>測試</td><td>一段自動檢查「程式算得對不對」的程式。紅燈＝沒通過，綠燈＝通過。</td></tr>
+<tr><td>先測試再實作（TDD）</td><td>先寫一個會失敗的測試，再寫讓它通過的程式，一小塊一小塊做。</td></tr>
+<tr><td>測試入口（seam）</td><td>測試從哪裡檢查，例如「給金額和人數，看每人金額」。</td></tr>
+<tr><td>助手（subagent）</td><td>主對話派出去分頭做事的另一個 AI。</td></tr>
+<tr><td>獨立審查</td><td>由看不到之前對話的 AI 來檢查改動。</td></tr>
+<tr><td>Git／提交（commit）</td><td>Git 是存版本的程式；提交就是存一個版本，像遊戲的存檔點。</td></tr>
+<tr><td>版本編號</td><td>每次提交 Git 給的一串英文數字，用來指出「哪一個存檔點」。</td></tr>
+<tr><td>GitHub／GitHub Issues</td><td>放 Git 專案的網站；Issues 是它的任務清單功能。</td></tr>
+<tr><td>PR（pull request）</td><td>請別人審核並合併改動的申請。</td></tr>
+<tr><td>規則檔</td><td>AI 每次對話會先讀的說明檔（<code>CLAUDE.md</code> 或 <code>AGENTS.md</code>）。</td></tr>
+<tr><td><code>.scratch</code></td><td>專案資料夾裡放規格和任務卡的資料夾（名字前面有一個點）。</td></tr>
+<tr><td>交接文件</td><td><code>handoff</code> 寫的進度摘要，讓新對話能接著做。</td></tr>
+<tr><td>Edge 無頭模式</td><td>讓 Windows 內建的 Edge 瀏覽器在背景打開網頁、不顯示視窗，把頁面上的結果印出來。AI 用它來看自我測試頁的結果。</td></tr>
+<tr><td><code>git config</code></td><td>設定 Git 的名字和 email 的指令。不加 <code>--global</code> 就只影響這一個專案資料夾。</td></tr>
+<tr><td>實作助手</td><td>AI 派出去照計畫寫程式的助手；規則允許它代你存版本。</td></tr>
+</table>
+
+<p class="small">AI 系統開發兵法 1.0　說明書二：第一次使用　｜　上一份：說明書一「安裝」（<code>1-安裝.html</code>）　下一份：說明書三「日常速查」（<code>3-日常速查.html</code>）</p>
+
+<script>
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest ? e.target.closest('.copy-btn') : null;
+  if (!btn) return;
+  var pre = btn.parentNode.querySelector('pre');
+  var text = pre ? pre.innerText : '';
+  function done(ok) {
+    btn.textContent = ok ? '已複製' : '請手動選取';
+    if (ok) btn.classList.add('done');
+    setTimeout(function () { btn.textContent = '複製'; btn.classList.remove('done'); }, 1800);
+  }
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    document.body.removeChild(ta); done(ok);
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+  } else { fallback(); }
+});
+</script>
+</body>
+</html>

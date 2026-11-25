@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>說明書三：日常速查｜AI 系統開發兵法 1.0</title>
+<style>
+:root {
+  --ink: #1a1a1a; --muted: #555; --line: #b8b8b8; --paper: #ffffff;
+  --brand: #1f3a5f; --ok: #1e6b3a; --ng: #8a4b00; --warn: #a3001b; --soft: #f4f6f8;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0 auto; max-width: 900px; padding: 20px 16px 40px;
+  color: var(--ink); background: var(--paper);
+  font-family: "Microsoft JhengHei", "微軟正黑體", "PingFang TC", "Noto Sans TC", "Heiti TC", sans-serif;
+  font-size: 14px; line-height: 1.6;
+}
+h2 { color: var(--brand); font-size: 1.3em; margin: 1.4em 0 .5em; padding-bottom: .2em; border-bottom: 2px solid var(--brand); }
+h3 { color: var(--brand); font-size: 1.05em; margin: 1em 0 .3em; }
+p, li, td { overflow-wrap: anywhere; }
+code { font-family: Consolas, "Courier New", monospace; background: var(--soft); border: 1px solid #e2e5e9; padding: 0 .2em; border-radius: 3px; font-size: .9em; overflow-wrap: anywhere; }
+table { border-collapse: collapse; width: 100%; margin: .5em 0; font-size: .9em; }
+th, td { border: 1px solid var(--line); padding: .3em .45em; vertical-align: top; text-align: left; }
+th { background: var(--soft); }
+.cover { border: 3px solid var(--brand); padding: 12px 18px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 8px 24px; }
+.cover .t1 { font-size: 1.7em; font-weight: bold; color: var(--brand); margin: 0; letter-spacing: .08em; }
+.cover .t2 { margin: 0; font-size: 1.05em; }
+.cover .t3 { margin: .2em 0 0; font-size: 1.25em; font-weight: bold; }
+.cover .meta { font-size: .88em; line-height: 1.5; }
+.blank { display: inline-block; border-bottom: 1px solid var(--ink); min-width: 8em; }
+.tag { display: inline-block; border: 1.5px solid var(--warn); color: var(--warn); font-weight: bold; font-size: .78em; line-height: 1.35; padding: 0 .3em; margin: 0 .15em; border-radius: 3px; white-space: nowrap; }
+.who-you { font-weight: bold; }
+.flow { width: 100%; height: auto; display: block; margin: .4em 0; }
+.legend { font-size: .85em; color: var(--muted); }
+.small { font-size: .85em; color: var(--muted); }
+.box { border: 1.5px solid var(--ink); padding: .4em .8em; margin: .6em 0; }
+.page { padding-top: .2em; }
+.copy { position: relative; margin: .4em 0; }
+.copy pre { margin: 0; padding: .5em 5em .5em .7em; background: #f7f7f2; border: 1.5px solid #8a8a7a; border-radius: 4px; white-space: pre-wrap; overflow-wrap: anywhere; font-family: Consolas, "Microsoft JhengHei", "微軟正黑體", monospace; font-size: .9em; line-height: 1.5; }
+.copy-btn { position: absolute; top: .3em; right: .3em; font: inherit; font-size: .82em; padding: .1em .6em; border: 1px solid var(--brand); background: #fff; color: var(--brand); border-radius: 3px; cursor: pointer; }
+.copy-btn.done { background: var(--ok); color: #fff; border-color: var(--ok); }
+@media (max-width: 640px) { table { font-size: .82em; } }
+@page { size: A4; margin: 12mm 12mm; }
+@media print {
+  body { max-width: none; padding: 0; font-size: 9.5pt; line-height: 1.45; }
+  .page + .page { break-before: page; }
+  .copy-btn { display: none; }
+  .copy pre { padding-right: .7em; }
+  h2, h3 { break-after: avoid; }
+  tr, .box, .copy { break-inside: avoid; }
+  th { background: #eee; }
+  table { font-size: 8.4pt; }
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= 第 1 頁：流程圖 ======================= -->
+<section class="page" id="p1">
+<div class="cover">
+  <div>
+    <p class="t1">AI 系統開發兵法</p>
+    <p class="t2">固定開發流程包</p>
+    <p class="t3">說明書三：日常速查</p>
+  </div>
+  <div class="meta">
+    版本：1.0　日期：2026-11-25<br>
+    維護人：<span class="blank">＿＿＿＿</span>（請維護人填寫聯絡方式）<br>
+    細節看說明書二「第一次使用」。真實 App 裡的叫法 <span class="tag">未實測 二#1</span><br>
+    「二#編號」＝說明書二第 11 章未實測清單的編號
+  </div>
+</div>
+
+<h2>一頁流程圖</h2>
+<svg class="flow" viewBox="0 0 720 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="主線六步流程圖，以及三個補充工具的切入點" font-family="Microsoft JhengHei, 微軟正黑體, PingFang TC, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a"/>
+    </marker>
+  </defs>
+  <style>
+    .m { fill: #fff; stroke: #1a1a1a; stroke-width: 2; }
+    .p { fill: #fff; stroke: #1a1a1a; stroke-width: 1.5; stroke-dasharray: 2 3; }
+    .s { fill: #fff; stroke: #1a1a1a; stroke-width: 1.5; stroke-dasharray: 7 4; }
+    .n { fill: #1a1a1a; font-size: 17px; font-weight: bold; }
+    .k { fill: #1a1a1a; font-size: 13px; font-family: Consolas, monospace; }
+    .t { fill: #1a1a1a; font-size: 12.5px; }
+    .w { fill: #1a1a1a; font-size: 12px; font-weight: bold; }
+    .l { stroke: #1a1a1a; stroke-width: 1.6; fill: none; }
+    .ld { stroke: #1a1a1a; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+  </style>
+
+  <!-- 準備 -->
+  <rect class="p" x="150" y="8" width="300" height="56" rx="6"/>
+  <text class="n" x="166" y="32">準備（每個專案一次）</text>
+  <text class="k" x="166" y="53">setup-matt-pocock-skills　·　Git 專案</text>
+  <line class="l" x1="300" y1="64" x2="300" y2="84" marker-end="url(#ar)"/>
+
+  <!-- 1 -->
+  <rect class="m" x="150" y="86" width="300" height="56" rx="6"/>
+  <text class="n" x="166" y="110">1　追問需求</text>
+  <text class="k" x="166" y="131">grill-me ／ grill-with-docs</text>
+  <text class="w" x="400" y="110">你</text>
+  <line class="l" x1="300" y1="142" x2="300" y2="162" marker-end="url(#ar)"/>
+
+  <!-- 2 -->
+  <rect class="m" x="150" y="164" width="300" height="56" rx="6"/>
+  <text class="n" x="166" y="188">2　寫規格</text>
+  <text class="k" x="166" y="209">to-spec</text>
+  <text class="w" x="400" y="188">你</text>
+  <line class="l" x1="300" y1="220" x2="300" y2="240" marker-end="url(#ar)"/>
+
+  <!-- 3 -->
+  <rect class="m" x="150" y="242" width="300" height="56" rx="6"/>
+  <text class="n" x="166" y="266">3　切任務卡 → 存版本</text>
+  <text class="k" x="166" y="287">to-tickets → commit</text>
+  <text class="w" x="400" y="266">你</text>
+  <line class="l" x1="300" y1="298" x2="300" y2="318" marker-end="url(#ar)"/>
+
+  <!-- 4 -->
+  <rect class="m" x="150" y="320" width="300" height="56" rx="6"/>
+  <text class="n" x="166" y="344">4　先測試再實作 → 存版本</text>
+  <text class="k" x="166" y="365">tdd → commit</text>
+  <text class="w" x="372" y="365">一卡一對話</text>
+  <line class="l" x1="300" y1="376" x2="300" y2="396" marker-end="url(#ar)"/>
+
+  <!-- 5 -->
+  <rect class="m" x="150" y="398" width="300" height="56" rx="6" stroke-width="3.5"/>
+  <text class="n" x="166" y="422">5　獨立審查（不能跳過）</text>
+  <text class="k" x="166" y="443">code-review → 修 → commit</text>
+  <line class="l" x1="300" y1="454" x2="300" y2="474" marker-end="url(#ar)"/>
+
+  <!-- 6 -->
+  <rect class="m" x="150" y="476" width="300" height="72" rx="6"/>
+  <text class="n" x="166" y="500">6　交付與檢討</text>
+  <text class="t" x="166" y="519">看三個標題 → 你自己驗收 → 存版本</text>
+  <text class="k" x="166" y="539">commit ·（pr）· retro</text>
+
+  <!-- 迴圈：回到 4 -->
+  <path class="l" d="M150,512 L110,512 L110,348 L146,348" marker-end="url(#ar)"/>
+  <text class="t" x="8" y="420">還有任務卡</text>
+  <text class="t" x="8" y="437">開新對話</text>
+  <text class="t" x="8" y="454">回到 4</text>
+  <text class="t" x="8" y="471">（太長先</text>
+  <text class="k" x="8" y="488">handoff）</text>
+
+  <!-- 補充：brownfield-recon -->
+  <rect class="s" x="500" y="60" width="212" height="74" rx="4"/>
+  <text class="w" x="512" y="81">補充：接手不熟的既有專案</text>
+  <text class="k" x="512" y="101">brownfield-recon</text>
+  <text class="t" x="512" y="121">第 1 步之前做一次</text>
+  <path class="ld" d="M500,110 L454,110" marker-end="url(#ar)"/>
+
+  <!-- 補充：blast-radius -->
+  <rect class="s" x="500" y="390" width="212" height="74" rx="4"/>
+  <text class="w" x="512" y="411">補充：改到共用的東西</text>
+  <text class="k" x="512" y="431">blast-radius</text>
+  <text class="t" x="512" y="451">審查之後、採用之前</text>
+  <path class="ld" d="M500,440 L476,440 L476,466 L454,466" marker-end="url(#ar)"/>
+
+  <!-- 補充：seam-audit -->
+  <rect class="s" x="500" y="490" width="212" height="74" rx="4"/>
+  <text class="w" x="512" y="511">補充：跨零件交付</text>
+  <text class="k" x="512" y="531">seam-audit</text>
+  <text class="t" x="512" y="551">收尾之前</text>
+  <path class="ld" d="M500,527 L454,527" marker-end="url(#ar)"/>
+
+  <!-- 圖例 -->
+  <rect class="m" x="150" y="566" width="22" height="14" rx="2"/>
+  <text class="t" x="178" y="578">主線</text>
+  <rect class="s" x="220" y="566" width="22" height="14" rx="2"/>
+  <text class="t" x="248" y="578">補充工具（需要時才用）</text>
+  <text class="w" x="410" y="578">你</text>
+  <text class="t" x="426" y="578">＝只有你能啟動</text>
+</svg>
+<p class="legend">圖上是技能的名稱。實際要打的字：Claude 桌面 App 打 <code>/mattpocock-skills:名稱</code>（本包裹的 <code>commit</code>、三個補充工具是 <code>/dev-bingfa:名稱</code>）；Codex 打 <code>$名稱</code> 從清單選 <span class="tag">未實測 二#1</span>。完整對照在下一頁。<code>commit</code> 需要專案是 Git 專案；沒有 Git 就跳過存版本，獨立審查改用全新對話（見第 3 頁）。</p>
+</section>
+
+<!-- ======================= 第 2 頁：指令表 ======================= -->
+<section class="page" id="p2">
+<h2>每一步打什麼</h2>
+<table>
+<tr><th style="width:12%">步驟</th><th style="width:17%">什麼時候</th><th style="width:22%">Claude 桌面 App 打什麼</th><th style="width:16%">Codex 打什麼 <span class="tag">未實測 二#1</span></th><th style="width:21%">產出什麼</th><th style="width:12%">誰能啟動</th></tr>
+<tr><td>準備</td><td>每個新專案一次</td><td><code>/mattpocock-skills:setup-matt-pocock-skills</code></td><td><code>$setup-matt-pocock-skills</code></td><td><code>docs\agents\</code> 設定（任務卡選「本地檔案」）、專案規則檔</td><td class="who-you">只有你</td></tr>
+<tr><td>1 追問需求</td><td>每件新工作的開頭</td><td><code>/mattpocock-skills:grill-me</code>（一次性的事）<br><code>/mattpocock-skills:grill-with-docs</code>（長期專案）</td><td><code>$grill-me</code><br><code>$grill-with-docs</code></td><td>雙方一致的理解；<code>grill-with-docs</code> 另外寫 <code>GLOSSARY.md</code> 和決策紀錄</td><td class="who-you">只有你</td></tr>
+<tr><td>2 寫規格</td><td>追問完，同一個對話接著打</td><td><code>/mattpocock-skills:to-spec</code></td><td><code>$to-spec</code></td><td><code>.scratch\…\spec.md</code></td><td class="who-you">只有你</td></tr>
+<tr><td>3 切任務卡</td><td>規格確認後</td><td><code>/mattpocock-skills:to-tickets</code></td><td><code>$to-tickets</code></td><td><code>.scratch\…\issues\01-….md</code> 等，一張一個檔</td><td class="who-you">只有你</td></tr>
+<tr><td>存版本</td><td>切完卡、每張卡做完、審查修完、交付時</td><td><code>/dev-bingfa:commit</code></td><td><code>$commit</code></td><td>Git 版本（存檔點）與版本編號；只存在你電腦，不上傳</td><td><span class="who-you">commit 技能：只有你</span>（AI 可請助手代存）</td></tr>
+<tr><td>4 先測試再實作</td><td>一張卡一個新對話</td><td><code>/mattpocock-skills:tdd</code></td><td><code>$tdd</code></td><td>程式與測試（建議：可按兩下打開的自我測試頁）</td><td>你或 AI</td></tr>
+<tr><td>5 獨立審查</td><td>每塊做完、存版本後。<strong>不能跳過</strong>；從這張卡開始前的存檔點審</td><td><code>/mattpocock-skills:code-review</code><br>（要打完整名稱；Claude 另有同名的 <code>/code-review</code>，不是這個）</td><td><strong>開全新對話</strong>再打 <code>$code-review</code></td><td>Standards（寫法）與 Spec（有沒有照規格）兩份報告</td><td>你或 AI</td></tr>
+<tr><td>6 交付</td><td>審查處理完</td><td>看三個標題、自己驗收，再 <code>/dev-bingfa:commit</code>；團隊放 GitHub 時用 <code>/mattpocock-skills:pr</code></td><td><code>$commit</code><br><code>$pr</code></td><td>存檔點；PR 申請說明（簡圖、前後證據、合併風險）</td><td>commit：同上<br>pr：你或 AI</td></tr>
+<tr><td>6 檢討</td><td>一段工作做完</td><td><code>/mattpocock-skills:retro</code></td><td><code>$retro</code></td><td>按嚴重程度排的改進建議，你決定採用哪些</td><td class="who-you">只有你</td></tr>
+<tr><td>交接</td><td>對話太長、中途冒出別的事</td><td><code>/mattpocock-skills:handoff</code></td><td><code>$handoff</code></td><td>交接文件（存在 Windows 暫存資料夾），新對話說「請讀【路徑】，接著做」</td><td class="who-you">只有你</td></tr>
+<tr><td>補充：探勘</td><td>接手不熟的既有專案，第 1 步之前一次</td><td><code>/dev-bingfa:brownfield-recon</code></td><td><code>$brownfield-recon</code></td><td>專案地圖 <code>CONTEXT_MAP.md</code>（只看不改）</td><td>你或 AI</td></tr>
+<tr><td>補充：影響範圍</td><td>改到多處共用的東西，審查後、採用前</td><td><code>/dev-bingfa:blast-radius</code></td><td><code>$blast-radius</code></td><td>每個使用處「沒影響／有影響／不確定」，加風險排序的手動檢查清單</td><td>你或 AI</td></tr>
+<tr><td>補充：接縫對帳</td><td>一個零件產生資料、另一個拿去用，收尾前</td><td><code>/dev-bingfa:seam-audit</code></td><td><code>$seam-audit</code></td><td>每條「誰產生→誰使用」的約定、誰在守；沒有跨零件會直接說不用跑</td><td>你或 AI</td></tr>
+</table>
+<p class="small">「只有你」：AI 會建議你打，但不會自己開始。Codex 上這一點主要靠規則檔的文字約束；Codex 的 AI 如果自己要開始，請說「這個要等我叫」。Codex 的清單如果顯示有前綴的名字（例如 <code>mattpocock-skills:grill-me</code>），照清單選。指令後面可以空一格接一句說明。表格裡的指令如果被折成兩行，打的時候照一整串打，中間不要加空格。</p>
+</section>
+
+<!-- ======================= 第 3 頁：卡住時 ======================= -->
+<section class="page" id="p3">
+<h2>卡住時怎麼辦</h2>
+<table>
+<tr><th style="width:36%">狀況</th><th>怎麼做</th></tr>
+<tr><td>打 <code>/</code>（Claude）或 <code>$</code>（Codex）看不到這些指令</td><td>完全關閉 App（右下角系統匣的圖示也要結束）再重開，開<strong>新對話</strong>再試。Claude 版確認包裹資料夾沒有被搬動或改名。還是沒有 → 說明書一第 9 章，再回報。</td></tr>
+<tr><td>AI 自己開始做「只有你能啟動」的步驟</td><td>說：「這個要等我叫。」需要時你自己打那個指令。</td></tr>
+<tr><td>追問需求問個沒完</td><td>說：「請把範圍縮到最小，剩下的都用你建議的答案。」</td></tr>
+<tr><td>還在追問或寫規格，AI 就開始寫程式</td><td>說：「先不要寫程式，我們還在問需求。」</td></tr>
+<tr><td>AI 說要先跑 <code>setup-matt-pocock-skills</code></td><td>這個專案還沒做「準備」。照第 2 頁第一列打一次，任務卡選「本地檔案」。</td></tr>
+<tr><td>審查說「沒有改動可以比」，或不知道從哪個存檔點審</td><td>通常是做完忘了存版本：先打 <code>commit</code> 存版本，再審。每張卡開始前問 AI「目前最新的存檔點編號是什麼？」記下來，審查就說「從存檔點【編號】之後」。</td></tr>
+<tr><td>沒有 Git</td><td>存版本跳過，並記得這次沒有存檔點。獨立審查改成：開<strong>全新對話</strong>，請它對照規格和任務卡審查檔案、只審不改（完整句子在說明書二第 6 章）<span class="tag">未實測 二#7</span>。</td></tr>
+<tr><td>AI 說「做好了」，但沒有證據、或沒有三個標題</td><td>說：「請補上：漏了什麼、放棄了什麼、猜了什麼，各在哪裡看得到，並用 Blocked on me／Changed／Found 三個標題收尾。」你自己打開成果用一次才算驗收。</td></tr>
+<tr><td>AI 說它沒辦法自己執行測試，或要安裝 Node、Python 等軟體</td><td>安裝的確認<strong>按拒絕</strong>，說：「不要安裝任何軟體，請用自我測試頁。」請它說清楚是怎麼確認的，你自己按兩下打開自我測試頁看。</td></tr>
+<tr><td>存版本時 Git 說不知道你是誰</td><td>說：「請只為這個專案資料夾設定 Git 的名字和 email：名字用「【代號】」，email 用 practice@example.com。只用 git config，不要加 --global。」設不起來就當成沒有 Git（上一列）。</td></tr>
+<tr><td>對話太長、AI 開始忘記前面說過的事</td><td>打 <code>handoff</code> 寫交接文件，開新對話接著做。以後一個對話只做一張任務卡。</td></tr>
+</table>
+<p class="small">改到 Python 檔、但「存檔自動檢查」沒啟用時（Codex，或沒有 Python 的 Claude），交付前貼這句：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>交付前請檢查：這次改過的 Python 檔裡，有沒有 `except Exception:` 或 `except:` 後面只有 `pass` 的地方？每一處請說明上游怎麼知道失敗、我在哪裡看得到。</pre></div>
+<p class="small">按「複製」沒反應：用滑鼠把框裡的字整段選起來，按 Ctrl+C。</p>
+
+<h2>什麼時候可以跳過步驟</h2>
+<div class="box">
+<ul style="margin:.2em 0; padding-left:1.3em">
+<li><strong>只改一行的小修正</strong>（例如改一個錯字、改一個數字）：整個流程都可以跳過。</li>
+<li><strong>只動一個頁面、沒碰到共用東西的小改動</strong>（改文字、改樣式、只在這一頁用的邏輯）：可以跳過 <code>blast-radius</code>，但<strong>獨立審查（<code>code-review</code>）不能跳</strong>。</li>
+<li><strong>其他所有改動</strong>：照流程走，獨立審查一定要做。</li>
+<li>一個對話只做一張任務卡；太大一個對話做不完的工作，先切成任務卡。</li>
+</ul>
+</div>
+
+<h2>回報給維護人</h2>
+<div class="box">
+<p style="margin:.2em 0">維護人：<span class="blank">＿＿＿＿</span>（請維護人填寫聯絡方式）</p>
+<p style="margin:.2em 0">請附上：① 包裹版本（<code>VERSION</code> 檔的數字）② 用哪個 App ③ 做到哪一步、打了什麼 ④ AI 回覆的<strong>原文</strong>或截圖 ⑤ 和說明書寫的哪裡不一樣（標「未實測」的地方請寫出編號，例如「說明書二 #6」）。不要附密碼或登入資訊。</p>
+</div>
+<p class="small"><strong>基本版（Cursor／Antigravity）</strong><span class="tag">未實測 二#8</span>：用一般的話叫技能，例如「請使用 grill-me 這個 skill，……」。獨立審查自己開全新對話、存檔檢查改貼清單、提交由你叫 <code>commit</code>：句子都在包裹的 <code>基本版\基本版說明.md</code> 第 3 節。</p>
+<p class="small">用語看不懂：說明書二第 12 章「看不懂的詞」。</p>
+</section>
+
+<script>
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest ? e.target.closest('.copy-btn') : null;
+  if (!btn) return;
+  var pre = btn.parentNode.querySelector('pre');
+  var text = pre ? pre.innerText : '';
+  function done(ok) {
+    btn.textContent = ok ? '已複製' : '請手動選取';
+    if (ok) btn.classList.add('done');
+    setTimeout(function () { btn.textContent = '複製'; btn.classList.remove('done'); }, 1800);
+  }
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    document.body.removeChild(ta); done(ok);
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+  } else { fallback(); }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>說明書一：安裝｜AI 系統開發兵法 1.0</title>
+<style>
+:root {
+  --ink: #1a1a1a; --muted: #555; --line: #c8c8c8; --paper: #ffffff;
+  --brand: #1f3a5f; --ok: #1e6b3a; --ng: #8a4b00; --warn: #a3001b; --soft: #f4f6f8;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0 auto; max-width: 880px; padding: 24px 16px 48px;
+  color: var(--ink); background: var(--paper);
+  font-family: "Microsoft JhengHei", "微軟正黑體", "PingFang TC", "Noto Sans TC", "Heiti TC", sans-serif;
+  font-size: 15px; line-height: 1.75;
+}
+h1, h2, h3, h4 { line-height: 1.35; color: var(--brand); }
+h2 { margin-top: 2.2em; padding-bottom: .25em; border-bottom: 2px solid var(--brand); font-size: 1.45em; }
+h3 { margin-top: 1.6em; font-size: 1.15em; }
+h4 { margin: 1.2em 0 .3em; font-size: 1em; }
+p, li { overflow-wrap: anywhere; }
+code { font-family: Consolas, "Courier New", monospace; background: var(--soft); border: 1px solid #e2e5e9; padding: 0 .25em; border-radius: 3px; font-size: .92em; overflow-wrap: anywhere; }
+table { border-collapse: collapse; width: 100%; margin: .8em 0; font-size: .93em; }
+th, td { border: 1px solid var(--line); padding: .4em .55em; vertical-align: top; text-align: left; }
+th { background: var(--soft); }
+.cover { border: 3px solid var(--brand); padding: 28px 24px; margin-bottom: 28px; }
+.cover .t1 { font-size: 2.2em; font-weight: bold; color: var(--brand); margin: 0; letter-spacing: .08em; }
+.cover .t2 { font-size: 1.25em; margin: .1em 0 1em; color: var(--ink); }
+.cover .t3 { font-size: 1.6em; font-weight: bold; margin: .4em 0; color: var(--ink); }
+.cover .meta { margin-top: 1em; font-size: .95em; }
+.cover .meta div { margin: .15em 0; }
+.blank { display: inline-block; border-bottom: 1px solid var(--ink); min-width: 10em; }
+.note { border: 1px solid var(--line); background: var(--soft); padding: .7em 1em; margin: 1em 0; }
+.alert { border: 2px solid var(--warn); padding: .7em 1em; margin: 1em 0; }
+.alert strong:first-child { color: var(--warn); }
+.tag { display: inline-block; border: 1.5px solid var(--warn); color: var(--warn); font-weight: bold; font-size: .78em; line-height: 1.4; padding: 0 .35em; margin: 0 .2em; border-radius: 3px; white-space: nowrap; vertical-align: .08em; }
+.tag.sim { border-style: dashed; border-color: var(--muted); color: var(--muted); }
+.screen { border: 1px solid #bdbdbd; background: #f2f2f2; color: #444; font-size: .9em; padding: .3em .8em; margin: .6em 0; }
+.unv { border: 2px solid var(--warn); padding: .4em .9em; margin: .7em 0; break-inside: avoid; }
+.unv .if { display: block; margin-top: .2em; }
+.keep { break-inside: avoid; }
+.quick { border: 3px double var(--brand); padding: .6em 1em; margin: 1em 0; break-inside: avoid; }
+.quick ol { margin: .3em 0; padding-left: 1.6em; }
+.quick a { color: var(--brand); }
+kbd { font-family: Consolas, monospace; border: 1px solid #888; border-bottom-width: 2px; border-radius: 3px; padding: 0 .35em; background: #fff; }
+.step { border: 1px solid var(--line); border-left: 6px solid var(--brand); padding: .4em 1em .8em; margin: 1.1em 0; break-inside: avoid; }
+.step > h4:first-child { margin-top: .5em; }
+.lbl { display: inline-block; font-weight: bold; font-size: .85em; padding: 0 .5em; margin-right: .4em; border: 1.5px solid currentColor; border-radius: 3px; }
+.do .lbl { color: var(--brand); }
+.ok { border-left: 4px solid var(--ok); padding: .2em .8em; margin: .6em 0; }
+.ok .lbl { color: var(--ok); }
+.ng { border-left: 4px dotted var(--ng); padding: .2em .8em; margin: .6em 0; }
+.ng .lbl { color: var(--ng); }
+.copy { position: relative; margin: .6em 0; }
+.copy pre { margin: 0; padding: .7em 5.2em .7em .8em; background: #f7f7f2; border: 1.5px solid #8a8a7a; border-radius: 4px; white-space: pre-wrap; overflow-wrap: anywhere; font-family: Consolas, "Microsoft JhengHei", "微軟正黑體", monospace; font-size: .95em; line-height: 1.6; }
+.copy-btn { position: absolute; top: .4em; right: .4em; font: inherit; font-size: .85em; padding: .15em .7em; border: 1px solid var(--brand); background: #fff; color: var(--brand); border-radius: 3px; cursor: pointer; }
+.copy-btn.done { background: var(--ok); color: #fff; border-color: var(--ok); }
+.toc ol { padding-left: 1.4em; margin: .3em 0; }
+.toc a { color: var(--brand); text-decoration: none; }
+.small { font-size: .9em; color: var(--muted); }
+@page { size: A4; margin: 15mm 14mm; }
+@media print {
+  body { max-width: none; padding: 0; font-size: 10.5pt; line-height: 1.6; }
+  .copy-btn { display: none; }
+  .copy pre { padding-right: .8em; }
+  a { color: inherit; text-decoration: none; }
+  h2, h3, h4 { break-after: avoid; }
+  .step, table, .note, .alert, .copy { break-inside: avoid; }
+  .cover { break-after: page; }
+}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <p class="t1">AI 系統開發兵法</p>
+  <p class="t2">固定開發流程包</p>
+  <p class="t3">說明書一：安裝</p>
+  <div class="meta">
+    <div>版本：1.0</div>
+    <div>日期：2026-11-25</div>
+    <div>適用：Claude 桌面 App（Code 分頁）、ChatGPT 桌面 App 裡的 Codex；Cursor、Antigravity 只有基本版<span class="tag">未實測 #12</span></div>
+    <div>維護人：<span class="blank">＿＿＿＿</span>（請維護人填寫聯絡方式）</div>
+  </div>
+  <div class="alert"><strong>先講清楚：</strong>這份說明書裡的安裝指令，已在一台電腦的「隔離測試環境」裡實際跑過；但<strong>還沒有在真正的桌面 App 畫面上從頭做過一次</strong>。之後維護人會在真的電腦上從頭做一次，再修正說明書。這份說明書用兩種標示：
+  <ul>
+  <li><span class="screen" style="display:inline-block;margin:0">灰色一行</span>：這一章寫的 App 畫面（按鈕名稱、確認視窗、選資料夾的位置）還沒核對過，以你看到的為準。</li>
+  <li><span class="tag">未實測 #編號</span> 紅框：<strong>結果</strong>可能跟寫的不一樣。每個紅框後面都寫了「如果不一樣」該怎麼辦。全部紅框列在第 10 章，回報時說編號就好。</li>
+  </ul></div>
+</div>
+
+<div class="quick">
+<strong>快速開始：Claude 桌面 App</strong>（卡住才看後面的章節）
+<ol>
+<li>在壓縮檔上按右鍵「解壓縮全部」，目的地改成 <code>C:\dev-bingfa-1.0</code>（<a href="#c1">第 1 章</a>）。</li>
+<li>開 Claude 桌面 App → Code → 新對話，資料夾選 <code>C:\dev-bingfa-1.0</code>；如果讓你選本機或雲端，選本機（<a href="#c2">2-1</a>）。</li>
+<li>貼上：<code>請讀 C:\dev-bingfa-1.0\安裝指示-ClaudeCode.md 這個檔案，照著幫我安裝。</code>（<a href="#c2">2-2</a>）</li>
+<li>跳出確認就按允許；AI 問你「要不要」就回「要，照指示做」；要你登入或輸入密碼就拒絕（<a href="#s23">2-3</a>）。</li>
+<li>看懂 AI 最後給的結果表（<a href="#s24">2-4</a>）。</li>
+<li>從右下角系統匣結束 Claude，再重開（<a href="#s25">2-5</a>）。</li>
+<li>開新對話，按一下 <kbd>/</kbd> 鍵，看得到 <code>/dev-bingfa:commit</code> 就完成（<a href="#s26">2-6</a>）。</li>
+</ol>
+</div>
+
+<div class="quick">
+<strong>快速開始：ChatGPT 桌面 App 裡的 Codex</strong>（卡住才看後面的章節）
+<ol>
+<li>在壓縮檔上按右鍵「解壓縮全部」，目的地改成 <code>C:\dev-bingfa-1.0</code>（<a href="#c1">第 1 章</a>）。</li>
+<li>開 ChatGPT 桌面 App → Codex，把 <code>C:\dev-bingfa-1.0</code> 加成專案，開新對話；如果讓你選本機或雲端，選本機（<a href="#c3">3-1</a>）。</li>
+<li>貼上：<code>請讀 C:\dev-bingfa-1.0\安裝指示-Codex.md 這個檔案，照著幫我安裝。</code>（<a href="#c3">3-2</a>）</li>
+<li>跳出確認就按允許；AI 問你「要不要」就回「要，照指示做」；要你登入或輸入密碼就拒絕（<a href="#s33">3-3</a>）。</li>
+<li>看懂 AI 最後給的結果表（<a href="#s34">3-4</a>）。</li>
+<li>從右下角系統匣結束 ChatGPT，再重開（<a href="#s35">3-5</a>）。</li>
+<li>在 Codex 開新對話，按一下 <kbd>$</kbd> 鍵，看得到 <code>commit</code>、<code>grill-me</code> 就完成（<a href="#s36">3-6</a>）。</li>
+</ol>
+</div>
+
+<nav class="toc">
+<strong>目錄</strong>
+<ol start="0">
+<li><a href="#c0">開始之前</a></li>
+<li><a href="#c1">解壓縮到固定的資料夾</a></li>
+<li><a href="#c2">Claude 桌面 App（Code 分頁）</a></li>
+<li><a href="#c3">ChatGPT 桌面 App 裡的 Codex</a></li>
+<li><a href="#c4">改成你的個人偏好</a></li>
+<li><a href="#c5">基本版：Cursor／Antigravity</a></li>
+<li><a href="#c6">連不上外部網路、或沒有 Git 時</a></li>
+<li><a href="#c7">AI 不能執行指令時的備案</a></li>
+<li><a href="#c8">更新、退回舊版、移除</a></li>
+<li><a href="#c9">常見問題</a></li>
+<li><a href="#c10">目前還沒確認的事</a></li>
+<li><a href="#c11">回報問題給維護人</a></li>
+<li><a href="#c12">看不懂的詞</a></li>
+</ol>
+</nav>
+
+<p class="note">這份說明書的寫法：每一步都分成三塊——<span class="lbl" style="color:var(--brand)">要做什麼</span>、<span class="lbl" style="color:var(--ok)">看到這個代表成功</span>、<span class="lbl" style="color:var(--ng)">沒看到的話</span>。框起來、右上角有「複製」按鈕的文字，請整段複製貼上，不要自己改字（除了說明裡叫你換掉的路徑）。按「複製」沒反應：用滑鼠把框裡的字整段選起來，按 Ctrl+C。</p>
+
+<!-- ===================== 0 ===================== -->
+<h2 id="c0">0　開始之前</h2>
+
+<h3>這包是什麼</h3>
+<p>「AI 系統開發兵法」是一套<strong>固定的 AI 開發流程</strong>。裝好之後，你的 AI 工具會照同一套順序做事：先問清楚需求 → 寫規格 → 切成小任務 → 先寫測試再寫程式 → 找「另一雙眼睛」審查 → 交付並檢討。不管是誰、用哪個 AI 工具，品質都比較穩定。</p>
+<p>安裝的方法很簡單：<strong>你把壓縮檔解開，然後對 AI 說一句話，請它讀包裹裡的「安裝指示」檔照著做。</strong>AI 會自己一步一步裝好，最後給你一張結果表。</p>
+
+<h3>裝好之後你會得到什麼</h3>
+<ul>
+<li><strong>Matt Pocock 的流程工具</strong>：一組公開的 AI 技能（skill，意思是「寫好的一套做事步驟」，AI 照著做），負責主線的每一步，例如追問需求的 <code>grill-me</code>、寫規格的 <code>to-spec</code>。</li>
+<li><strong>本包裹的 4 個技能</strong>：<code>brownfield-recon</code>（接手不熟的專案前先畫地圖）、<code>blast-radius</code>（查改的東西有沒有弄壞別人）、<code>seam-audit</code>（查不同零件之間的約定有沒有人守）、<code>commit</code>（幫你把改動存成一個版本）。</li>
+<li><strong>3 個助手</strong>：另一個 AI 分頭做事，負責大量讀資料、照計畫實作、上網查資料。主對話負責規劃和把關。</li>
+<li><strong>規則</strong>：一份「AI 該怎麼做事」的規則，會加到你電腦上 AI 每次都會讀的規則檔尾端。</li>
+<li><strong>存檔自動檢查（選用）</strong>：AI 每寫完一個 Python 程式檔，電腦就自動掃一次一種常見錯誤。只有 Claude 版、而且電腦有 Python 才會裝。</li>
+</ul>
+
+<h3>完整版和基本版</h3>
+<table>
+<tr><th></th><th>完整版</th><th>基本版</th></tr>
+<tr><td>工具</td><td>Claude 桌面 App（Code 分頁）、ChatGPT 桌面 App 裡的 Codex</td><td>Cursor、Antigravity 等</td></tr>
+<tr><td>怎麼裝</td><td>對 AI 說一句話，AI 照安裝指示裝（第 2、3 章）</td><td>自己把資料夾複製到專案裡（第 5 章）</td></tr>
+<tr><td>流程技能＋規則</td><td>有</td><td>有</td></tr>
+<tr><td>助手（另一個 AI 分頭做事）</td><td>有</td><td>沒有，改成你手動開新對話</td></tr>
+<tr><td>存檔自動檢查</td><td>Claude 版：有 Python 才有。Codex 版：這項沒啟用</td><td>沒有，改成交付前貼一段檢查清單</td></tr>
+<tr><td>測試狀況</td><td>安裝指令在隔離環境實測過；真實 App 畫面還沒核對（見封面說明）</td><td>整包 <span class="tag">未實測 #12</span></td></tr>
+</table>
+
+<h3>需要準備什麼</h3>
+<table>
+<tr><th>東西</th><th>一定要嗎</th><th>沒有的話會怎樣</th></tr>
+<tr><td>Claude 桌面 App 或 ChatGPT 桌面 App，<strong>已經登入</strong>，而且你能開它的 Code 分頁／Codex 模式</td><td>一定要（至少一個）</td><td>裝不了。請先找公司 IT 或維護人。</td></tr>
+<tr><td>這個包裹的壓縮檔</td><td>一定要</td><td>向維護人拿。</td></tr>
+<tr><td>Git（存版本用的免費程式）</td><td>選配</td><td>Claude 版：Matt 的工具改用包裹裡的離線副本（版本差一點點，見第 6 章）。<strong>之後用流程時不能存版本、獨立審查也少了「從哪裡開始比」的依據</strong>（說明書二會講怎麼辦）。</td></tr>
+<tr><td>Python 3.8 以上（一種程式語言的執行程式）</td><td>選配</td><td>Claude 版的「存檔自動檢查」不裝，結果表會寫「<strong>自動檢查這項沒啟用</strong>」，並給你一句手動替代的話。其他功能照常。</td></tr>
+</table>
+<p class="small">不知道自己有沒有 Git、Python？不用先查。安裝時 AI 會自己檢查，並在結果表告訴你。</p>
+
+<!-- ===================== 1 ===================== -->
+<h2 id="c1">1　解壓縮到固定的資料夾</h2>
+
+<div class="step">
+<h4>1-1　把壓縮檔整個解開</h4>
+<div class="do"><span class="lbl">要做什麼</span>在壓縮檔上按右鍵，選「解壓縮全部」。跳出的視窗裡有一格「解壓縮到這個資料夾」的路徑（畫面可能略有不同），把它改成一個<strong>以後不會搬動</strong>的資料夾，建議：</div>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>C:\dev-bingfa-1.0</pre></div>
+<p>建議用英文、沒有空白的路徑（中文和空白在測試裡也能用，但英文最保險）。<strong>不要</strong>直接在壓縮檔裡面點開檔案來用，也不要放在「下載」或暫存資料夾。</p>
+<div class="ok"><span class="lbl">看到這個代表成功</span>打開 <code>C:\dev-bingfa-1.0</code>，裡面直接看得到 <code>安裝指示-ClaudeCode.md</code>、<code>安裝指示-Codex.md</code>、<code>VERSION</code>、<code>外掛</code>、<code>規則</code>、<code>離線副本</code>、<code>說明書</code> 這些東西。</div>
+<div class="ng"><span class="lbl">沒看到的話</span>如果打開後只看到一個同名的資料夾（例如變成 <code>C:\dev-bingfa-1.0\dev-bingfa-1.0</code>），或你解到別的名字的資料夾，都沒關係：以<strong>真的看得到 <code>安裝指示-ClaudeCode.md</code> 的那一層</strong>當包裹資料夾，後面句子裡的路徑換成那一層（例如 <code>C:\dev-bingfa-1.0\dev-bingfa-1.0\安裝指示-ClaudeCode.md</code>）。決定好之後就不要再搬動。</div>
+</div>
+
+<div class="alert"><strong>重要：裝好之後，這個資料夾不能搬動、不能改名、不能刪除。</strong><br>
+Claude 版是直接讀這個資料夾裡的東西。測試時把資料夾改名，Claude 馬上載入失敗、兩個外掛都不能用（改回原名才恢復）。Codex 版是把檔案複製走，裝完後不依賴這個資料夾，但以後移除、升級都要用到它，所以也請留著。</div>
+
+<!-- ===================== 2 ===================== -->
+<h2 id="c2">2　Claude 桌面 App（Code 分頁）</h2>
+<p>只用 ChatGPT／Codex 的人，跳到<a href="#c3">第 3 章</a>。</p>
+<p class="screen">本章的 App 畫面描述（分頁名稱、選資料夾的位置、確認視窗的樣子和次數、系統匣選單）還沒在真的 App 上核對過，以你看到的為準。</p>
+
+<div class="step">
+<h4>2-1　開一個新的 Code 對話，資料夾選包裹資料夾</h4>
+<div class="do"><span class="lbl">要做什麼</span>打開 Claude 桌面 App，切到 <strong>Code</strong> 分頁，開一個新對話。選工作資料夾時，選你剛剛解壓的 <code>C:\dev-bingfa-1.0</code>。畫面可能略有不同——重點是「這個對話的資料夾是包裹資料夾」。<br>如果畫面讓你選「本機（Local）」或「雲端（Cloud／Remote）」之類的工作方式，<strong>選本機</strong>：雲端的 AI 讀不到你電腦上的 <code>C:\dev-bingfa-1.0</code>，第一步就會失敗。（選項的實際名稱沒核對過。）</div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>可以在對話框打字，畫面上某處顯示你選的資料夾。</div>
+<div class="ng"><span class="lbl">沒看到的話</span>找不到 Code 分頁或選資料夾的地方：可能是 App 版本或帳號沒有這個功能。拍下畫面給維護人。</div>
+</div>
+
+<div class="step">
+<h4>2-2　對 AI 說這一句話</h4>
+<div class="do"><span class="lbl">要做什麼</span>複製下面這句，貼到對話框送出。如果你的包裹資料夾不是 <code>C:\dev-bingfa-1.0</code>，把路徑換成你的。</div>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請讀 C:\dev-bingfa-1.0\安裝指示-ClaudeCode.md 這個檔案，照著幫我安裝。</pre></div>
+<p class="small">怎麼拿到正確的完整路徑：在檔案總管找到 <code>安裝指示-ClaudeCode.md</code>，按住 Shift 再按右鍵，選「複製為路徑」（選單文字可能略有不同），貼上時會多一組雙引號，留著或刪掉都可以。</p>
+<div class="ok"><span class="lbl">看到這個代表成功</span>AI 開始照指示做。第一步做完，它會回報一行像 <code>OK 包裹位置：C:\dev-bingfa-1.0　版本：1.0</code>，並提醒你「這個包裹資料夾要一直留在原地」。</div>
+<div class="ng"><span class="lbl">沒看到的話</span>
+<ul>
+<li>AI 說找不到檔案 → 路徑打錯了，照上面的方法重新複製路徑。</li>
+<li>AI 回 <code>STOP 包裹還在壓縮檔或暫存資料夾裡</code> → 回到第 1 章，解壓到固定資料夾。</li>
+<li>AI 說它不能執行指令 → 看<a href="#c7">第 7 章</a>。</li>
+</ul></div>
+</div>
+
+<div class="step" id="s23">
+<h4>2-3　AI 會跳出哪些「允許」確認</h4>
+<p>AI 每執行一段指令，App 可能會跳出一個確認，問你要不要讓它執行。確認視窗裡顯示的通常是一段指令（英文和符號），不是下表的中文。<strong>怎麼判斷</strong>：</p>
+<ul>
+<li>看得到 <code>claude.exe</code>、<code>plugin</code>、<code>CLAUDE.md</code>、<code>dev-bingfa</code>、<code>離線副本</code>、<code>python</code> 這些字 → 按允許。</li>
+<li>看到 <code>login</code>、<code>auth</code>、<code>password</code>、<code>ssh</code>、<code>token</code>，或要你改權限模式 → <strong>按拒絕</strong>，拍下畫面給維護人。</li>
+</ul>
+<p>下表是 AI 照指示會做的事，可以對照它正在做哪一步：</p>
+<table>
+<tr><th>第幾步</th><th>AI 在做什麼</th><th>會改你電腦上的東西嗎</th></tr>
+<tr><td>1</td><td>確認包裹資料夾的位置、版本</td><td>不會（只讀）</td></tr>
+<tr><td>2</td><td>找到 App 內附的 Claude Code 程式，查已經裝了什麼、有沒有 Python</td><td>不會（只讀）</td></tr>
+<tr><td>3</td><td>裝 Matt 的工具：先試從網路（GitHub）下載，可能要等一兩分鐘；連不上就改用包裹裡的離線副本（會再跳一次確認）</td><td>會：加一個外掛</td></tr>
+<tr><td>4</td><td>裝本包裹的主外掛 <code>dev-bingfa</code></td><td>會：加一個外掛</td></tr>
+<tr><td>5</td><td>有 Python 才做：裝存檔自動檢查 <code>dev-bingfa-check</code></td><td>會：加一個外掛</td></tr>
+<tr><td>6</td><td>把規則加到你的規則檔 <code>CLAUDE.md</code> 尾端（<strong>先備份</strong>原檔）</td><td>會：改規則檔，只加不刪</td></tr>
+<tr><td>7</td><td>最後自我檢查</td><td>不會（只讀）</td></tr>
+</table>
+<div class="do"><span class="lbl">要做什麼</span>上表這些事，按「允許」。<strong>如果 AI 或視窗要你登入、輸入密碼、設定 SSH 金鑰、執行 <code>gh auth login</code>、或修改權限設定 → 一律按拒絕</strong>，拍下畫面給維護人。安裝指示裡沒有任何一步需要這些。</div>
+<p class="small">第 3 步如果先試網路失敗、再改用離線副本，就會多一次確認；所以確認的次數每個人不一定一樣。</p>
+<p><strong>AI 也可能在對話裡停下來問你</strong>：</p>
+<ul>
+<li>「確定要讓我修改規則檔／加入外掛來源嗎？」→ 回答：<code>要，照指示做</code>。</li>
+<li>「你的電腦好像已經用別的方式裝過 Matt Pocock 的工具……要我跳過 Matt 的工具、只裝其他部分嗎？」→ 一般回答 <code>跳過</code>（不然每個工具會出現兩次）。不確定就問維護人。</li>
+<li>「App 跳出（或擋下）了一個確認，請按允許，我再執行一次」→ 按允許，或回答它可以再試。你不想允許就說不要，它會停下來回報。</li>
+</ul>
+</div>
+
+<div class="step" id="s24">
+<h4>2-4　看懂 AI 最後給的結果表</h4>
+<p>AI 做完會給你一張四列的表（項目／結果／為什麼／下一步）。對照這裡看：</p>
+<table>
+<tr><th>項目</th><th>正常會看到</th><th>要注意</th></tr>
+<tr><td>Matt Pocock 的工具</td><td>「裝好了（官方方式）」或「用離線副本安裝（連不上 GitHub）」或「原本就有」；重裝新版時也可能是「改用這個包裹的離線副本（原本指向：…）」</td><td>這幾種都算成功。「沒裝（你選擇跳過）」也可以，代表你電腦本來就有。</td></tr>
+<tr><td>dev-bingfa 主外掛</td><td>「裝好了」</td><td>如果「下一步」提到舊的包裹資料夾，代表你以前從別的資料夾裝過，現在改用這個。舊資料夾<strong>能不能刪，照結果表寫的做</strong>；表上沒有明說可以刪之前，不要自己刪（<a href="#c8">第 8 章</a>）。</td></tr>
+<tr><td>存檔自動檢查</td><td>「裝好了」，或「<strong>自動檢查這項沒啟用</strong>——這台電腦沒有 Python 3.8 以上」</td><td>沒啟用不是錯誤。請記下 AI 給你的那句手動替代的話（下面也有）。</td></tr>
+<tr><td>規則檔 <code>CLAUDE.md</code></td><td>「已附加在檔尾」或「已更新」，並寫出檔案位置和<strong>備份位置</strong></td><td>備份檔名長得像 <code>CLAUDE.md.bak-dev-bingfa-日期時間</code>，出問題時可以拿它還原。</td></tr>
+</table>
+<p>沒啟用自動檢查時的手動替代（每次 AI 交付有改到 Python 檔時，貼這句）：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>交付前請檢查：這次改過的 Python 檔裡，有沒有 `except Exception:` 或 `except:` 後面只有 `pass` 的地方？每一處請說明上游怎麼知道失敗、我在哪裡看得到。</pre></div>
+<div class="unv"><span class="tag">未實測 #6</span>存檔自動檢查裝好之後，在真正的 Claude 對話裡會不會跳出提醒，只在模擬環境測過。
+<span class="if"><strong>如果不一樣：</strong>你懷疑它沒在動 → 交付前照樣貼上面那句手動替代的話，並告訴維護人。</span></div>
+<div class="ng"><span class="lbl">沒看到的話</span>結果表裡有「沒裝」卻沒說原因、或 AI 說「卡在第幾步」→ 把 AI 的整段回報原文複製下來給維護人（見<a href="#c11">最後一節</a>）。</div>
+</div>
+
+<div class="step" id="s25">
+<h4>2-5　完全關閉 App，再重新打開</h4>
+<div class="do"><span class="lbl">要做什麼</span>關掉 Claude 桌面 App 的視窗之後，到螢幕右下角的系統匣（時鐘旁邊的小圖示區，可能要按「^」展開）找到 Claude 的圖示，按右鍵選結束（選單文字可能略有不同）。然後重新打開 App。</div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>系統匣裡的 Claude 圖示消失後再重開。保險起見要完全結束；只關視窗，新裝的東西可能不會載入。</div>
+</div>
+
+<div class="step" id="s26">
+<h4>2-6　確認裝好了</h4>
+<div class="do"><span class="lbl">要做什麼</span>在 Code 分頁開一個<strong>新對話</strong>，在對話框用鍵盤按一下 <kbd>/</kbd> 鍵（斜線，在右下方 Shift 旁邊）。</div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>跳出一份清單，裡面有 <code>/dev-bingfa:commit</code>、<code>/dev-bingfa:brownfield-recon</code>、<code>/mattpocock-skills:grill-me</code> 這類名字（前面是外掛名、冒號後面是技能名）。</div>
+<div class="unv"><span class="tag">未實測 #1</span>重開後清單裡會不會出現這些名字，還沒在真的 App 上看過。
+<span class="if"><strong>如果不一樣：</strong>先確定 2-5 有真的完全關閉、開的是新對話；還是沒有 → 照<a href="#c9">第 9 章</a>「看不到指令」做，再把清單畫面和 AI 的結果表給維護人。</span></div>
+<div class="unv"><span class="tag">未實測 #7</span>直接打短名稱（例如 <code>/grill-me</code>）能不能用，沒有測過，所以所有說明書一律教完整名稱。
+<span class="if"><strong>如果不一樣：</strong>短名稱沒反應 → 打完整名稱（<code>/mattpocock-skills:grill-me</code>）。</span></div>
+</div>
+
+<!-- ===================== 3 ===================== -->
+<h2 id="c3">3　ChatGPT 桌面 App 裡的 Codex</h2>
+<p>Codex 現在是 ChatGPT 桌面 App 裡的一個模式。這條路和 Claude 版最大的不同：<strong>AI 是把檔案複製到你的使用者資料夾</strong>，不用任何額外程式。</p>
+
+<p class="screen">本章的 App 畫面描述（Codex 的位置、加專案的按鈕、確認視窗的樣子和次數、系統匣選單）還沒在真的 App 上核對過，以你看到的為準。</p>
+
+<div class="step">
+<h4>3-1　切到 Codex，把包裹資料夾加成專案</h4>
+<div class="do"><span class="lbl">要做什麼</span>打開 ChatGPT 桌面 App，切到 <strong>Codex</strong>。把 <code>C:\dev-bingfa-1.0</code> 加成一個專案（官方文件裡叫「Add new project」），然後在這個專案開一個新對話。畫面可能略有不同——重點是「這個對話的資料夾是包裹資料夾」。<br>如果畫面讓你選「本機（Local）」或「雲端（Cloud）」之類的工作方式，<strong>選本機</strong>：雲端的 AI 讀不到你電腦上的資料夾。（選項的實際名稱沒核對過。）</div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>在這個專案底下可以打字對話。</div>
+<div class="ng"><span class="lbl">沒看到的話</span>找不到 Codex 或加專案的地方 → 拍下畫面給維護人。</div>
+</div>
+
+<div class="step">
+<h4>3-2　對 AI 說這一句話</h4>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請讀 C:\dev-bingfa-1.0\安裝指示-Codex.md 這個檔案，照著幫我安裝。</pre></div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>AI 回報 <code>OK 包裹位置：…　版本：1.0</code>，接著做下一步。</div>
+<div class="ng"><span class="lbl">沒看到的話</span>和 2-2 一樣處理：找不到檔案就重新複製路徑；說不能執行指令就看<a href="#c7">第 7 章</a>。</div>
+</div>
+
+<div class="step" id="s33">
+<h4>3-3　AI 會做的事、會問的事</h4>
+<p>確認視窗裡看得到 <code>.agents</code>、<code>.codex</code>、<code>AGENTS.md</code>、<code>dev-bingfa</code>、<code>離線副本</code>、<code>Copy-Item</code> 這些字 → 按允許。看到 <code>login</code>、<code>auth</code>、<code>password</code>、<code>ssh</code>、<code>token</code>，或要你改權限模式 → 按拒絕。</p>
+<table>
+<tr><th>第幾步</th><th>AI 在做什麼</th><th>會改你電腦上的東西嗎</th></tr>
+<tr><td>1</td><td>確認包裹資料夾的位置、版本</td><td>不會（只讀）</td></tr>
+<tr><td>2</td><td>先全部檢查一遍，再把 4 個技能、3 個助手設定、5 份搜尋策略、Matt 的 27 個技能複製到你的使用者資料夾（<code>.agents\skills</code>、<code>.codex\agents</code>）</td><td>會：新增檔案。<strong>有同名但內容不同的東西就一個都不複製</strong>，停下來問你</td></tr>
+<tr><td>3</td><td>把規則加到你的規則檔 <code>AGENTS.md</code> 尾端（<strong>先備份</strong>）</td><td>會：改規則檔，只加不刪</td></tr>
+<tr><td>4</td><td>最後自我檢查</td><td>不會（只讀）</td></tr>
+</table>
+<p>第 2、3 步是寫到專案資料夾<strong>外面</strong>（你的使用者資料夾），Codex 可能會多問一次要不要允許。按允許。要你登入、輸入密碼、改權限設定 → 按拒絕。</p>
+<p><strong>AI 可能停下來問你</strong>：</p>
+<ul>
+<li>表格裡有 <code>CONFLICT</code>：「你的電腦已經有同名的技能或助手，但內容不一樣……我沒有複製任何東西」→ 不要叫它覆蓋。把那幾行給維護人，等維護人回覆。</li>
+<li><code>MATT-LOOSE</code>：「你的電腦好像已經用別的方式裝過 Matt Pocock 的工具……要我跳過嗎？」→ 一般回答 <code>跳過</code>。</li>
+<li>規則那一步說有 <code>AGENTS.override.md</code>：你的電腦有另一份會蓋過規則檔的設定，AI 不會改。把訊息給維護人。</li>
+<li>「確定要讓我修改規則檔嗎？」→ 回答 <code>要，照指示做</code>。</li>
+</ul>
+</div>
+
+<div class="step" id="s34">
+<h4>3-4　看懂結果表</h4>
+<table>
+<tr><th>項目</th><th>正常會看到</th></tr>
+<tr><td>本包裹的 4 個技能</td><td>裝好了，放在 <code>%USERPROFILE%\.agents\skills</code></td></tr>
+<tr><td>3 個助手設定和搜尋策略</td><td>裝好了，放在 <code>%USERPROFILE%\.codex\agents</code></td></tr>
+<tr><td>Matt Pocock 的工具</td><td>「從離線副本複製」、「原本就有外掛」，或「沒裝（你選擇跳過，因為已經用別的方式裝過）」</td></tr>
+<tr><td>存檔自動檢查</td><td>沒裝——「<strong>自動檢查這項沒啟用</strong>」（這條路線本來就不裝，不是錯誤）</td></tr>
+<tr><td>規則檔 <code>AGENTS.md</code></td><td>已附加或已更新，寫出位置和備份位置。若有 <code>WARN 規則檔超過 32 KiB</code>，代表規則檔太大，Codex 可能讀不完，請告訴維護人</td></tr>
+</table>
+<p class="small"><code>%USERPROFILE%</code> 是「你的使用者資料夾」，通常是 <code>C:\Users\你的帳號</code>。</p>
+</div>
+
+<div class="step" id="s35">
+<h4>3-5　完全關閉 ChatGPT 桌面 App，再重新打開</h4>
+<div class="do"><span class="lbl">要做什麼</span>和 2-5 一樣：關視窗後，到右下角系統匣找到它的圖示按結束，再重開。</div>
+</div>
+
+<div class="step" id="s36">
+<h4>3-6　確認裝好了</h4>
+<div class="do"><span class="lbl">要做什麼</span>在 Codex 開一個新對話，在對話框用鍵盤按一下 <kbd>$</kbd> 鍵（Shift＋數字 4）。</div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>跳出技能清單，看得到 <code>commit</code>、<code>brownfield-recon</code>、<code>grill-me</code> 這類名字。</div>
+<div class="unv"><span class="tag">未實測 #2</span>Codex 的 <kbd>$</kbd> 清單會不會列出這些技能、名字有沒有前綴，還沒在真的 App 上看過。
+<span class="if"><strong>如果不一樣：</strong>清單顯示的是有前綴的名字（例如 <code>mattpocock-skills:grill-me</code>）→ 以後就照清單上的名字選。完全沒有 → 確定有完全關閉再重開、開的是新對話；還是沒有 → <a href="#c9">第 9 章</a>「看不到指令」，再回報。</span></div>
+<p>也可以問它：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>你有哪些自訂助手？</pre></div>
+<p>回答裡應該提到 <code>bingfa-explorer</code>、<code>bingfa-implementer</code>、<code>bingfa-web-search-agent</code>。</p>
+<div class="unv"><span class="tag">未實測 #3</span>Codex 認不認得複製過去的 3 個助手，還沒在真的 App 上確認過。
+<span class="if"><strong>如果不一樣：</strong>其他功能照常能用（主對話會自己讀、自己改，只是慢一點）。拍下回答給維護人。</span></div>
+</div>
+
+<h3>Codex 和 Claude 版不一樣的地方</h3>
+<ul>
+<li><strong>技能名稱沒有前綴</strong>：Claude 打 <code>/mattpocock-skills:grill-me</code>，Codex 這條路線的名字就是 <code>grill-me</code>，打 <kbd>$</kbd> 從清單選（見上面 #2）。</li>
+<li><strong>存檔自動檢查：這項沒啟用。</strong>手動替代：AI 交付有改到 Python 檔時，貼上 2-4 底下那句話。</li>
+<li><strong>「只能你叫」的保護比較弱</strong>：有些技能（例如 <code>grill-me</code>、<code>to-spec</code>、<code>commit</code>）設計成只能由你啟動，AI 不能自己開始。在 Claude，這是程式擋住的；在 Codex，Claude 那個設定不算數，主要靠規則檔裡的文字約束 AI，再加上這些技能大多附了一個 Codex 用的「不要自己啟動」設定。</li>
+</ul>
+<div class="unv"><span class="tag">未實測 #4</span>Codex 的 AI 會不會遵守「只能你叫」，還沒在真的 App 上看過。
+<span class="if"><strong>如果不一樣：</strong>AI 自己說「我來執行 grill-me」之類的話，回它：「這個要等我叫。」</span></div>
+<ul>
+<li><strong>裝完不依賴包裹資料夾</strong>：檔案已經複製走了。但請保留包裹資料夾，移除和升級要用。</li>
+<li><strong>ChatGPT 的設定畫面也能改規則檔</strong>：官方文件說「設定」裡的個人化（Personalization）可以編輯 <code>AGENTS.md</code>。建議還是照第 4 章用記事本改。</li>
+</ul>
+<div class="unv"><span class="tag">未實測 #5</span>在 ChatGPT 的設定畫面存檔，會不會把我們加在 <code>AGENTS.md</code> 的那段蓋掉，沒有測過。
+<span class="if"><strong>如果不一樣：</strong>用記事本打開 <code>AGENTS.md</code>（第 4 章），看不到 <code>&lt;!-- dev-bingfa:start</code> 那行 → 在 Codex 再說一次 3-2 的安裝句，它會重新加回去（只加一次，不會重複）。</span></div>
+
+<!-- ===================== 4 ===================== -->
+<h2 id="c4">4　改成你的個人偏好</h2>
+<p>第一次安裝時，AI 會在規則檔最後放一段「個人偏好」的預設值：用繁體中文回覆、回覆簡短、交付時給看得到的證據、各種工作用哪個模型。你可以自己改。</p>
+
+<div class="step">
+<h4>4-1　用記事本打開規則檔</h4>
+<div class="do"><span class="lbl">要做什麼</span>按鍵盤 <strong>Windows 鍵 + R</strong>，跳出「執行」小視窗，貼上對應的那一行，按 Enter。</div>
+<p>Claude 版：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>notepad %USERPROFILE%\.claude\CLAUDE.md</pre></div>
+<p>Codex 版：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>notepad %USERPROFILE%\.codex\AGENTS.md</pre></div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>記事本打開一份很長的檔案，最後面有一行 <code>&lt;!-- dev-bingfa:end --&gt;</code>，它下面是 <code>## Personal Preferences</code>。（安裝結果表如果說「沿用你原本的個人偏好」，那段在你原本放的位置，不一定在結束標記下面。）</div>
+<div class="ng"><span class="lbl">沒看到的話</span>記事本問你要不要建立新檔 → 按取消，代表規則還沒裝好，回去看結果表或問維護人。</div>
+</div>
+
+<div class="step">
+<h4>4-2　只改 <code>## Personal Preferences</code> 那一段</h4>
+<table>
+<tr><th>這一段</th><th>能不能改</th></tr>
+<tr><td><code>&lt;!-- dev-bingfa:start …--&gt;</code> 到 <code>&lt;!-- dev-bingfa:end --&gt;</code> 之間（通用規則）</td><td><strong>不要改。</strong>這段由安裝程序管理，重裝時會被換回新版，你改的會不見。</td></tr>
+<tr><td><code>&lt;!-- dev-bingfa:end --&gt;</code> 下面的 <code>## Personal Preferences</code></td><td><strong>可以改。</strong>這段是你的，重裝不會動它。</td></tr>
+<tr><td><code>&lt;!-- dev-bingfa:start</code> 上面的內容</td><td>那是你原本就有的東西，照你自己的習慣處理。</td></tr>
+</table>
+<p>常見的改法：</p>
+<ul>
+<li>回覆語言：把 <code>一律用繁體中文回覆</code> 裡的「繁體中文」改成你要的語言。</li>
+<li>模型：Claude 版寫著 <code>Fable</code>、<code>Opus</code>、<code>Sonnet</code>，只是範例，請換成你的 App 模型選單裡實際看得到的名稱。Codex 版寫的是「用較強的那個／用較快的那個」。</li>
+<li>不想要的項目：整行刪掉，AI 就照通用規則的預設做。</li>
+</ul>
+<p>改完按「檔案 → 儲存」。如果記事本問編碼，選 <strong>UTF-8</strong>（不要選 ANSI），不然下次安裝或移除時 AI 會停下來說「規則檔不是 UTF-8 編碼」。</p>
+<div class="ok"><span class="lbl">看到這個代表成功</span>存檔後<strong>開一個新對話</strong>，AI 就會照新的偏好做。例如改成英文後，新對話的 AI 用英文回你。</div>
+<p class="small">注意：個人偏好只能調整語言、長短、驗收方式和模型；不能取消規則要求 AI 回報的「漏了什麼、放棄了什麼、猜了什麼、在哪裡看得到」。</p>
+</div>
+
+<!-- ===================== 5 ===================== -->
+<h2 id="c5">5　基本版：Cursor／Antigravity</h2>
+<div class="unv"><span class="tag">未實測 #12</span><strong>基本版整章都沒有實際測試過。</strong>維護人手上沒有 Cursor 和 Antigravity，下面的說法（技能放哪裡、規則檔會不會被讀、Matt 工具怎麼裝、沒有網路時複製離線副本）來自官方文件或網路摘要（Antigravity 的官方網站當時連不上）；「沒有網路時複製離線副本」是比照 Codex 的做法推出來的。
+<span class="if"><strong>如果不一樣：</strong>照本章的「沒看到的話」做；還是不行，把你的工具名稱、版本和畫面回報維護人。</span></div>
+
+<div class="step">
+<h4>5-1　把基本版複製到你的專案資料夾</h4>
+<div class="do"><span class="lbl">要做什麼</span>打開包裹裡的 <code>基本版</code> 資料夾，把裡面的 <code>AGENTS.md</code> 和 <code>.agents</code> 資料夾複製到你的專案資料夾最上層。</div>
+<ul>
+<li>專案資料夾裡<strong>已經有</strong> <code>AGENTS.md</code>：不要蓋掉，把基本版 <code>AGENTS.md</code> 的內容貼到原本檔案最後面。</li>
+<li>個人偏好：把 <code>規則\個人偏好範例.md</code> 裡「從這裡開始複製」以下的內容，改好後貼在 <code>AGENTS.md</code> 最後面。</li>
+<li>Antigravity：只教裝在專案資料夾。「整台電腦都能用」的裝法網路上有好幾種互相矛盾的說法，不教。</li>
+</ul>
+<div class="ok"><span class="lbl">看到這個代表成功</span>專案資料夾裡有 <code>AGENTS.md</code> 和 <code>.agents\skills\</code>，裡面有 <code>blast-radius</code>、<code>brownfield-recon</code>、<code>commit</code>、<code>seam-audit</code> 四個資料夾。</div>
+</div>
+
+<div class="step">
+<h4>5-2　裝 Matt Pocock 的工具</h4>
+<p>Matt 的官方說明給「其他工具」的裝法是一行指令，需要電腦有 <strong>Node.js 22.20 以上</strong>（一種執行程式），要在專案資料夾裡執行。不會打指令的話，可以請 Cursor／Antigravity 裡的 AI 幫你執行。Cursor 用：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>npx skills@latest add mattpocock/skills -a cursor</pre></div>
+<p>Antigravity 用：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>npx skills@latest add mattpocock/skills -a antigravity</pre></div>
+<p>它問你要裝哪些技能時，一定要包含 <code>setup-matt-pocock-skills</code>。<code>-a</code> 後面的工具代號（<code>cursor</code>、<code>antigravity</code>）來自網路文件的摘要。</p>
+<div class="unv"><span class="tag">未實測 #13</span>Matt 的官方說明列出的代號裡有 <code>cursor</code>，<strong>沒有</strong> <code>antigravity</code>；<code>antigravity</code> 只出現在網路摘要。
+<span class="if"><strong>如果不一樣：</strong>它說不認得 <code>antigravity</code>（或 <code>cursor</code>）→ 把 <code>-a</code> 和後面那個字拿掉，再執行一次，它會讓你從清單選工具。</span></div>
+<div class="ng"><span class="lbl">沒有 Node.js、或連不上網路的話</span>把包裹 <code>離線副本\mattpocock-skills\skills\engineering</code> 和 <code>…\skills\productivity</code> 裡的<strong>資料夾</strong>（不要選 <code>README.md</code> 檔），複製到專案資料夾的 <code>.agents\skills\</code>。<code>misc</code>、<code>in-progress</code>、<code>deprecated</code> 不要複製。這是比照 Codex 備案的做法推出來的（見 #12）。</div>
+</div>
+
+<div class="step">
+<h4>5-3　確認 AI 有讀到規則（一分鐘自我測試）</h4>
+<p>Cursor 會不會每次對話都自動讀 <code>AGENTS.md</code>，官方沒寫清楚（屬於 #12）。開一個新對話，問它：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>你看到哪些專案規則？請列出規則檔的檔名，並說出第 7 節的標題。</pre></div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>它說出 <code>AGENTS.md</code>，第 7 節標題是「Silence Is a Defect」（沉默就是缺陷）。</div>
+<div class="ng"><span class="lbl">沒看到的話</span>以後每次開新對話，第一句先說：</div>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請先讀專案最上層的 AGENTS.md，之後都照裡面的規則做事。</pre></div>
+</div>
+
+<h3>基本版少了什麼、怎麼補</h3>
+<table>
+<tr><th>少了</th><th>怎麼補</th></tr>
+<tr><td>助手（另一個 AI 分頭做事）</td><td>主對話自己做；獨立審查改成<strong>你手動開一個新對話</strong>來審</td></tr>
+<tr><td>存檔自動檢查</td><td>交付前貼一段檢查清單，請 AI 自己走一遍</td></tr>
+<tr><td>提交交給助手</td><td>由你自己叫 <code>commit</code> 這個技能</td></tr>
+</table>
+<p>每一項要貼的句子，都在包裹裡的 <code>基本版\基本版說明.md</code>（用記事本打開就能看）。</p>
+
+<!-- ===================== 6 ===================== -->
+<h2 id="c6">6　連不上外部網路、或沒有 Git 時</h2>
+<p>你不用自己判斷。AI 照安裝指示，會自動選路：</p>
+<table>
+<tr><th>情況</th><th>Claude 版會怎樣</th><th>Codex 版會怎樣</th></tr>
+<tr><td>連得上 GitHub，而且有 Git</td><td>Matt 的工具用官方方式裝（版本 1.3.1）</td><td>一律從包裹的離線副本複製（版本 1.3.2）</td></tr>
+<tr><td>連不上 GitHub，或沒有 Git</td><td>官方方式失敗後，<strong>自動改用離線副本</strong>（版本 1.3.2）。失敗訊息是預期中的，不用緊張</td><td>同上，一律用離線副本</td></tr>
+</table>
+<ul>
+<li><strong>版本差一點點沒關係</strong>：離線副本是 1.3.2（取自 2026-11-24 的官方內容）；測試當時官方方式拿到的是 1.3.1，之後官方可能更新到更新的版本。兩個版本的 27 個技能名稱完全一樣（隔離環境核對過）。</li>
+<li><strong>失敗訊息叫你設定 SSH 金鑰、<code>gh auth login</code></strong>：那是登入，不要照做。AI 照指示會直接改用離線副本。</li>
+<li>這兩條路在隔離環境都實際跑過（包括模擬「沒有 Git」的情況）。</li>
+<li>離線副本是 Matt Pocock 的作品，依 MIT 授權原樣附上，說明在 <code>離線副本\第三方內容聲明.md</code>。</li>
+</ul>
+<div class="unv"><span class="tag">未實測 #10</span>在真正斷網的電腦上跑過一次全程（測試時沒有真的拔網路，只證明離線那條路只用電腦上的檔案）。
+<span class="if"><strong>如果不一樣：</strong>AI 停下來說卡在第 3 步 → 把它的回報原文給維護人，不要叫它改用別的方式裝。</span></div>
+
+<!-- ===================== 7 ===================== -->
+<h2 id="c7">7　AI 不能執行指令時的備案</h2>
+<p>如果 AI 說它沒辦法執行指令、或同一步一直失敗，可以改成<strong>你自己照著做</strong>：</p>
+<div class="step">
+<div class="do"><span class="lbl">要做什麼</span>用記事本打開包裹裡的 <code>貼指令備案.md</code>。Claude 版看 A 段（打開 PowerShell 視窗，一段一段複製貼上）；Codex 版看 B 段（用檔案總管複製資料夾，只有最後一步要貼一段指令）。</div>
+<div class="ok"><span class="lbl">看到這個代表成功</span>每一段後面都寫著「看到什麼代表成功」，和 AI 版的步驟一樣。</div>
+<div class="ng"><span class="lbl">沒看到的話</span>不要自己嘗試別的做法，把 PowerShell 視窗或檔案總管的畫面拍給維護人。</div>
+</div>
+<p class="small">PowerShell 是 Windows 內建、可以打指令的視窗。備案裡會教你怎麼打開它。</p>
+
+<!-- ===================== 8 ===================== -->
+<h2 id="c8">8　更新、退回舊版、移除</h2>
+
+<h3>移除</h3>
+<div class="step">
+<div class="do"><span class="lbl">要做什麼</span>在要移除的那個 App 開新對話（資料夾選包裹資料夾），說下面其中一句。<strong>請用安裝時那個版本的包裹</strong>——Codex 版只會移走和包裹裡一模一樣的檔案，拿別的版本來移除，什麼都不會動。</div>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請讀 C:\dev-bingfa-1.0\移除指示.md，幫我移除 Claude Code 版。</pre></div>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請讀 C:\dev-bingfa-1.0\移除指示.md，幫我移除 Codex 版。</pre></div>
+<p>想連 Matt Pocock 的工具一起移除，句子最後加上：<code>Matt 的工具也一起移除。</code>（不說的話，預設保留。）</p>
+<div class="ok"><span class="lbl">看到這個代表成功</span>AI 給你一張表（已移除／本來就沒有／保留），寫出規則檔的備份位置；Codex 版另外寫出一個備份資料夾（檔案是「移到」那裡，不是刪掉）。你的個人偏好那段會留著。做完要完全關閉 App 再重開。</div>
+<div class="ng"><span class="lbl">要注意</span>
+<ul>
+<li>有 <code>KEEP</code> 的項目代表內容和包裹不一樣，AI 沒有動它。要怎麼處理請問維護人。</li>
+<li><strong>包裹資料夾能不能刪，照 AI 最後的回報做。</strong>Claude 版如果 Matt 的工具保留、而且它是從這個包裹的離線副本裝的，Matt 的工具還在讀這個資料夾——這時 AI 會說「還不能刪」，要刪就連 Matt 一起移除。回報沒有明說可以刪，就不要刪。</li>
+</ul></div>
+</div>
+
+<div class="keep">
+<h3>更新到新版</h3>
+<p>維護人發新版時，會在 <code>更新紀錄.md</code> 寫「要不要重裝」。需要重裝時：</p>
+<ul>
+<li><strong>Claude 版</strong>：把新版解壓到另一個固定資料夾（例如 <code>C:\dev-bingfa-1.1</code>），在新資料夾照第 2 章再說一次那句話。AI 會把本包裹的外掛（如果 Matt 的工具是用離線副本裝的，也包括它）改成讀新資料夾。<strong>舊資料夾能不能刪，看結果表</strong>：表上明說舊資料夾已經不用、可以刪，才刪；表上沒說，或說「還不能刪」，就留著，有疑問問維護人。</li>
+<li><strong>Codex 版</strong>：新版的檔案和舊的不一樣，直接重裝會被判成 <code>CONFLICT</code> 而停下來。所以要<strong>先用舊版包裹移除</strong>，移除那句話最後加上 <code>Matt 的工具也一起移除。</code>（不然 Matt 的工具會一直停在舊版，重裝時還會問你要不要跳過）；再用新版包裹安裝。</li>
+<li>規則檔重裝只會換掉標記中間那段，不會加兩次，你的個人偏好不會被動（這點在隔離環境實測過）。</li>
+</ul>
+</div>
+
+<h3>退回舊版</h3>
+<p>舊版的壓縮檔會保留在公司共用資料夾。退回的做法和更新一樣，只是方向相反：</p>
+<ul>
+<li>Claude 版：把舊版解壓到它自己的資料夾，在那個資料夾說一次安裝句。資料夾能不能刪，一樣看結果表。</li>
+<li>Codex 版：先用「現在這一版」的包裹移除（加上 <code>Matt 的工具也一起移除。</code>），再用舊版的包裹安裝。</li>
+</ul>
+<div class="unv"><span class="tag">未實測 #11</span>升級和退回整條流程沒有在真的 App 裡從頭做過；「改讀新資料夾」和「結果表、移除回報告訴你資料夾能不能刪」已寫進安裝指示和移除指示，指令本身在隔離環境試過。
+<span class="if"><strong>如果不一樣：</strong>結果表沒提舊資料夾能不能刪，或你拿不準 → 兩個資料夾都留著，把結果表原文給維護人。</span></div>
+
+<!-- ===================== 9 ===================== -->
+<h2 id="c9">9　常見問題</h2>
+
+<h4>公司防毒軟體擋下「存檔自動檢查」，或跳出警告</h4>
+<p>這項是選用的，<strong>不要裝這項</strong>就好。還沒裝的話，在安裝那句話後面加一句（安裝指示寫明你本人的指示優先）：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>請跳過第 5 步，不要裝存檔自動檢查（dev-bingfa-check），其他照指示做。</pre></div>
+<div class="unv"><span class="tag">未實測 #8</span>AI 會不會照這句跳過第 5 步，沒有測過。
+<span class="if"><strong>如果不一樣：</strong>它還是裝了 → 把結果表給維護人，請維護人協助移除這一項；這段期間用 2-4 底下那句手動替代的話。</span></div>
+<p>已經裝了才被擋 → 拍下警告畫面給維護人。這段期間用 2-4 底下那句手動替代的話。不要自己想辦法繞過防毒軟體。</p>
+
+<h4>AI 拒絕修改它自己的規則檔</h4>
+<p>有些 AI 很謹慎，不肯改「控制自己行為」的檔案。這是正常的保護。可以跟它說：</p>
+<div class="copy"><button class="copy-btn" type="button">複製</button><pre>這是我要求的。請照安裝指示的規則檔那一步做，它會先備份，而且只在檔尾加一段。</pre></div>
+<div class="unv"><span class="tag">未實測 #9</span>真的 App 裡的 AI 會不會拒絕、聽了這句會不會照做，沒有測過。
+<span class="if"><strong>如果不一樣：</strong>它還是不肯 → 用<a href="#c7">第 7 章</a>的備案，規則那一步你自己貼（Claude 版是備案的 A6，Codex 版是 B4）。</span></div>
+
+<h4>打 <code>/</code>（Claude）或 <code>$</code>（Codex）看不到新的指令</h4>
+<ol>
+<li>確定已經<strong>完全關閉</strong> App（系統匣的圖示也要結束），再重開。</li>
+<li>開一個<strong>新對話</strong>再試，舊對話不會更新。</li>
+<li>Claude 版：確定包裹資料夾沒有被搬動、改名、刪除。</li>
+<li>都試過還是沒有 → 把畫面和安裝時 AI 給的結果表，交給維護人。</li>
+</ol>
+
+<h4>裝到一半停下來了</h4>
+<p>AI 照指示，遇到任何沒寫到的情況都會<strong>立刻停下來</strong>，說「卡在第幾步、看到什麼、什麼還沒裝」。這是設計好的，不是壞掉。</p>
+<ul>
+<li>把 AI 的回報<strong>原文</strong>整段複製，交給維護人。不要叫 AI「自己想辦法」或改用別的方式裝。</li>
+<li>維護人說可以重試時，再說一次那句話即可。重複安裝不會把規則加兩次、不會重複複製（隔離環境實測過）。</li>
+</ul>
+
+<h4>AI 說找不到 Claude Code 程式（<code>STOP 找不到 Claude Code 程式</code>）</h4>
+<p>代表 App 內附的程式不在預期的位置。給維護人看這段訊息。</p>
+
+<!-- ===================== 10 ===================== -->
+<h2 id="c10">10　目前還沒確認的事</h2>
+<p>規格裡列出、開工時還沒驗證的事，現在的狀況：</p>
+<table>
+<tr><th>項目</th><th>現況（白話一句）</th></tr>
+<tr><td>Codex 和 Claude 能不能共用同一個外掛包</td><td>用 <code>codex</code> 指令裝時可以共用（只用得到技能）；但 ChatGPT 桌面 App 沒有 <code>codex</code> 指令，所以這份說明書改走「複製檔案」。外掛那條路在 App 裡未實測，你不會用到。</td></tr>
+<tr><td>同事的電腦能不能連 GitHub</td><td>還不知道。兩條路都準備好了，AI 會自動選（第 6 章，#10）。</td></tr>
+<tr><td>Antigravity 的技能和規則檔位置</td><td>只教放在專案資料夾；官方網站當時連不上，資料來自網路摘要（#12）。</td></tr>
+<tr><td>Cursor 會不會每次對話都讀 <code>AGENTS.md</code></td><td>官方沒寫清楚；用 5-3 的一分鐘自我測試確認（#12）。</td></tr>
+<tr><td>被排除的工具有沒有被留下的檔案引用</td><td>已處理：找到的兩處都改掉了，不影響你。</td></tr>
+<tr><td>「AI 系統開發兵法」有沒有同名的書或產品</td><td>沒找到；但博客來、Google Books 當時沒能直接查。</td></tr>
+</table>
+<p>另外，下面這些<strong>結果</strong>可能跟說明書寫的不一樣（之後維護人會在真的電腦上從頭做一次，再修正說明書）。回報時說編號就好：</p>
+<table>
+<tr><th>編號</th><th>還沒確認的事</th><th>在哪裡</th></tr>
+<tr><td>#1</td><td>Claude 重開後打 <kbd>/</kbd> 有沒有 <code>/dev-bingfa:…</code></td><td><a href="#s26">2-6</a></td></tr>
+<tr><td>#2</td><td>Codex 的 <kbd>$</kbd> 清單有沒有這些技能、名字有沒有前綴</td><td><a href="#s36">3-6</a></td></tr>
+<tr><td>#3</td><td>Codex 認不認得複製過去的 3 個助手</td><td><a href="#s36">3-6</a></td></tr>
+<tr><td>#4</td><td>Codex 的 AI 會不會遵守「只能你叫」</td><td>第 3 章末</td></tr>
+<tr><td>#5</td><td>ChatGPT 設定畫面存檔會不會蓋掉規則檔那一段</td><td>第 3 章末</td></tr>
+<tr><td>#6</td><td>存檔自動檢查在真正的 Claude 對話裡會不會跳出提醒</td><td><a href="#s24">2-4</a></td></tr>
+<tr><td>#7</td><td>Claude 直接打短名稱能不能用</td><td><a href="#s26">2-6</a></td></tr>
+<tr><td>#8</td><td>AI 會不會照「請跳過第 5 步」做</td><td><a href="#c9">第 9 章</a></td></tr>
+<tr><td>#9</td><td>AI 會不會拒絕改自己的規則檔</td><td><a href="#c9">第 9 章</a></td></tr>
+<tr><td>#10</td><td>真正斷網的電腦</td><td><a href="#c6">第 6 章</a></td></tr>
+<tr><td>#11</td><td>升級、退回整條流程</td><td><a href="#c8">第 8 章</a></td></tr>
+<tr><td>#12</td><td>基本版（Cursor、Antigravity）整章</td><td><a href="#c5">第 5 章</a></td></tr>
+<tr><td>#13</td><td><code>npx skills … -a antigravity</code> 的代號</td><td><a href="#c5">5-2</a></td></tr>
+</table>
+<p class="small">App 畫面的樣子（按鈕名稱、確認視窗幾次）沒核對的部分，在各章開頭用灰色一行標示，不另外編號。</p>
+
+<!-- ===================== 11 ===================== -->
+<h2 id="c11">11　回報問題給維護人</h2>
+<p>維護人：<span class="blank">＿＿＿＿</span>（請維護人填寫聯絡方式）</p>
+<p>回報時請附上：</p>
+<ol>
+<li>包裹版本（包裹資料夾裡 <code>VERSION</code> 檔寫的數字，例如 1.0）。</li>
+<li>你用的是哪個 App：Claude 桌面 App，還是 ChatGPT 桌面 App 的 Codex（或 Cursor、Antigravity）。</li>
+<li>做到說明書的第幾章第幾步。</li>
+<li>AI 回報的<strong>原文</strong>（整段複製貼上，不要自己摘要），以及畫面截圖。</li>
+<li>說明書寫的和你實際看到的哪裡不一樣——標著「未實測 #編號」的地方，寫出編號。</li>
+</ol>
+<p><strong>不要</strong>附上密碼、登入資訊、或規則檔以外的私人檔案。</p>
+
+<!-- ===================== 12 ===================== -->
+<h2 id="c12">12　看不懂的詞</h2>
+<table>
+<tr><th>詞</th><th>意思</th></tr>
+<tr><td>技能（skill）</td><td>寫好的一套做事步驟。AI 讀了就照著做。例如 <code>grill-me</code> 是「追問需求」的步驟。</td></tr>
+<tr><td>外掛（plugin）</td><td>把好幾個技能、助手打包在一起的安裝單位。Claude 版用外掛安裝。</td></tr>
+<tr><td>外掛目錄（marketplace）</td><td>告訴 App「外掛放在哪裡」的清單。本包裹的 <code>外掛</code> 資料夾就是一份。</td></tr>
+<tr><td>助手（subagent）</td><td>主對話派出去分頭做事的另一個 AI，做完把結論交回來。</td></tr>
+<tr><td>規則檔</td><td>AI 每次對話都會先讀的說明檔。Claude 讀 <code>CLAUDE.md</code>，Codex、Cursor、Antigravity 讀 <code>AGENTS.md</code>。</td></tr>
+<tr><td>標記</td><td>規則檔裡 <code>&lt;!-- dev-bingfa:start …--&gt;</code> 和 <code>&lt;!-- dev-bingfa:end --&gt;</code> 這兩行。AI 會把它們當註記看，不影響規則；安裝程序靠它們找到「本包裹那一段」。</td></tr>
+<tr><td>前綴</td><td>名字前面加的外掛名，例如 <code>/dev-bingfa:commit</code> 的 <code>dev-bingfa:</code>。</td></tr>
+<tr><td>Git</td><td>一個免費程式，能把檔案的每一個版本存下來，隨時可以比較或退回。</td></tr>
+<tr><td>提交（commit）</td><td>用 Git 存一個版本，像遊戲的存檔點。</td></tr>
+<tr><td>GitHub</td><td>放 Git 專案的網站。Matt 的工具官方版放在那裡。</td></tr>
+<tr><td>離線副本</td><td>包裹裡附的一份 Matt 工具，連不上 GitHub 時用。</td></tr>
+<tr><td>Python</td><td>一種程式語言；存檔自動檢查是用它寫的，所以要有它才能裝。</td></tr>
+<tr><td>Node.js／npx</td><td>另一種執行程式；基本版用 <code>npx</code> 這個指令安裝 Matt 的工具。</td></tr>
+<tr><td>PowerShell</td><td>Windows 內建、可以打指令的視窗。安裝時 AI 用它執行指令。</td></tr>
+<tr><td>系統匣</td><td>螢幕右下角、時鐘旁邊放小圖示的地方。</td></tr>
+<tr><td><code>%USERPROFILE%</code></td><td>「你的使用者資料夾」的代號，通常是 <code>C:\Users\你的帳號</code>。</td></tr>
+<tr><td>UTF-8</td><td>一種存文字檔的格式（編碼）。記事本存檔時選它，中文才不會出問題。</td></tr>
+<tr><td>專案資料夾</td><td>放某一個工作所有檔案的資料夾。</td></tr>
+</table>
+
+<p class="small">AI 系統開發兵法 1.0　說明書一：安裝　｜　下一份：說明書二「第一次使用」（<code>2-第一次使用.html</code>）</p>
+
+<script>
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest ? e.target.closest('.copy-btn') : null;
+  if (!btn) return;
+  var pre = btn.parentNode.querySelector('pre');
+  var text = pre ? pre.innerText : '';
+  function done(ok) {
+    btn.textContent = ok ? '已複製' : '請手動選取';
+    if (ok) btn.classList.add('done');
+    setTimeout(function () { btn.textContent = '複製'; btn.classList.remove('done'); }, 1800);
+  }
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    document.body.removeChild(ta); done(ok);
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+  } else { fallback(); }
+});
+</script>
+</body>
+</html>
